@@ -9,6 +9,7 @@ var DiscountCodes = [];
 var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
+var currentversion='3.0';
 
 //Payment methods
 var paymentMethodCash = "K";
@@ -409,7 +410,7 @@ function checkVersion() {
             // var versionstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
             var version = $(xml).children('version').text();
 
-            if (version=='2.5') {
+            if (version==currentversion) {
                   //version ok
             } else {
                 alert("Ny versjon finnes: "+version+" ");
