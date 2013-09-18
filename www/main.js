@@ -2379,6 +2379,8 @@ function saveImageData(orderId) {
     alert(2);
     window.plugins.canvas.toDataURL(canvas, "image/png", success, failure);
 	
+	alert(3);
+	alert(arg.data);
     function success(arg) {
         if (arg.size > 0) {
             Basket[currentOrderId]['sign'] = arg.data;
@@ -2396,7 +2398,9 @@ function saveImageData(orderId) {
 
 function continueAfterSign(orderId) {
     screenLevel = 5;
+    alert(4);
     clearCanvas();
+    alert(5);
     $("#sign").hide();
     $("#signButton"+orderId).hide();
     $("#showSignButton"+orderId).hide();
