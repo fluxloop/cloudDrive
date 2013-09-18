@@ -2377,7 +2377,7 @@ function saveImageData(orderId) {
 
     var canvas = document.getElementById('imageView');
     alert(2);
-    window.plugins.canvas.toDataURL(canvas, "image/png", success, failure);
+    //window.plugins.canvas.toDataURL(canvas, "image/png", success, failure);
 	
 	alert(3);
 	alert(arg.data);
@@ -2394,6 +2394,7 @@ function saveImageData(orderId) {
         alert("Signatur feilet: " + arg);
         $("#saveSignInfo").hide();
     }
+     continueAfterSign(currentOrderId);
 }
 
 function continueAfterSign(orderId) {
