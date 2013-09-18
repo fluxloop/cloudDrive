@@ -2,7 +2,7 @@ body {
     margin: 50px 0 0 0;
     padding: 0px;
     min-height: 356px;
-    font-family: Breuer;
+    font-family: RobotoCondensed;
     background: white;
     Color: Black;
     width: 100%;
@@ -17,25 +17,41 @@ html {
 
 }
 
-@font-face {
-   font-family: Gloucester;
-   src: url('GloucesterMTExtraCondensed.ttf') format('truetype');
+/*@font-face {
+   font-family: RobotoCondensed;
+   src: url('RobotoCondensedMTExtraCondensed.ttf') format('truetype');
 }
 
 @font-face {
-   font-family: Breuer;
-   src: url('BreuerCondensed-Bold.otf') format('opentype');
+   font-family: RobotoCondensed;
+   src: url('RobotoCondensedCondensed-Bold.otf') format('opentype');
 }
+*/
+
+@font-face {
+    font-family: 'RobotoCondensed';
+    src: url('Roboto-Condensed-webfont.eot');
+    src: url('Roboto-Condensed-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Roboto-Condensed-webfont.woff') format('woff'),
+         url('Roboto-Condensed-webfont.ttf') format('truetype'),
+         url('Roboto-Condensed-webfont.svg#RobotoCondensed') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 
 h1, h2, h3, p {
     display: block;
     width: 96%;
     margin: 5px 2% 20px 2%;
+    font-weight: normal;
 
 }
 
 h1, h2, h3 {
-    font-family: Gloucester;
+    font-family: RobotoCondensed;
+     font-weight: normal;
 }
 
 a {
@@ -47,7 +63,7 @@ input {
     box-sizing: border-box;
     width: 100%;
     padding: 4px;
-    font-family: Breuer;
+    font-family: RobotoCondensed;
     font-size: 18px;
 }
 
@@ -79,7 +95,7 @@ input {
     margin-left: 2%;
     padding: 0;
     line-height: 50px;
-    font-family: Gloucester;
+    font-family: RobotoCondensed;
     color: #666;
 }
 
@@ -92,7 +108,7 @@ input {
 #loginDiv #pincode {
     width: 96%;
     margin: 10px 2% 10px 2%;
-    font-family: Gloucester;
+    font-family: RobotoCondensed;
     font-size: 24px;
 }
 
@@ -176,7 +192,7 @@ input {
     width: 96%;
     padding: 0 2% 0 2%;
     float: left;
-    font-family: Gloucester;
+    font-family: RobotoCondensed;
     border-bottom: #cdcdcd 1px solid;
 }
 
@@ -209,6 +225,7 @@ input {
 .listitem em {
     display:block;
     float: right;
+    font-style: normal;
 
 }
 
@@ -228,11 +245,13 @@ input {
 .listitem .placement {
     position: relative;
     display: block;
-    top: -15px;
+    /*top: -15px;*/
+    padding-left: 5px;
+    padding-right: 5px;
     right: 0;
     text-align: right;
-    color: red;
-    line-height: 25px;
+    line-height: 50px;
+    float: right;
 }
 
 /* Tabs for details */
@@ -561,7 +580,7 @@ ul li.giftCard {
 input.paymentValue {
     width: 96%;
     margin: 10px 2% 10px 2%;
-    font-family: Gloucester;
+    font-family: RobotoCondensed;
     font-size: 24px;
 }
 
