@@ -28,8 +28,8 @@ var screenLocked = false;
 var localDriverOrdersUrl = "http://localhost:8080/driver/svarer_27-02-2013.xml?bust="+Math.floor(Math.random()*100);
 var localGiftCardUrl = "http://localhost:8080/giftcard.xml";
 var phoneLocalDriverOrdersUrl = "svarer_27-02-2013.xml";
-var fxlDriverOrdersUrl = "http://fluxloop.com/fetchdrivertotalorder.php?time=";
 var fxlLogUrl = "http://fluxloop.com/peppes/log.php";
+
 
 var peppesApiUrl = "https://www.peppes.no/peppesapi";
 var peppesVersionUrl = "http://fluxloop.com/peppesversion.php?bust="+Math.floor(Math.random()*100);
@@ -2056,7 +2056,7 @@ function completeDelivery(orderId, urlParams, tip) {
     if (Basket[orderId]['sign']) {
         var params = deliveryUrl.slice(deliveryUrl.indexOf("?") + 1, deliveryUrl.length);
         params += "&sign=" + Basket[orderId]['sign'];
-
+		alert(params);
         $.ajax({
             type: "POST",
             url: peppesDeliveryOrderUrl,
