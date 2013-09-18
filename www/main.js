@@ -1,10 +1,12 @@
-//Globals -- remember to reset in resetApp()
-var Basket = new Array();
-var PaymentMethods = new Array();
-var GlobalPaymentMethods = new Array();
-var Giftcards = new Array();
-var DiscountCodes = new Array();
-var ComplaintCodes = new Array();
+/*jshint sub:true, eqeqeq:false, -W041*/
+
+//Globals -- Must be reset in function resetApp()
+var Basket = [];
+var PaymentMethods = [];
+var GlobalPaymentMethods = [];
+var Giftcards = [];
+var DiscountCodes = [];
+var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
 
@@ -16,17 +18,17 @@ var paymentMethodInvoice = "F";
 var paymentMethodLateDelivery = "SL";
 
 // States
-var screenLevel = 0; //Used to determine the back-button behavior 
+var screenLevel = 0; //Used to determine the back-button behavior
 var isTouching = false; //Flag for whether or not the user is currently touching the screen
 var ignoreClick = false; //Flag for when click-events should be ignored by underlying elements. Workaround for multiple click-events firing on overlapping elements.
 var screenLocked = false;
 
 //Urls
-var localDriverOrdersUrl = "http://localhost:8080/svarer_27-02-2013.xml?bust="+Math.floor(Math.random()*100);
+var localDriverOrdersUrl = "http://localhost:8080/driver/svarer_27-02-2013.xml?bust="+Math.floor(Math.random()*100);
 var localGiftCardUrl = "http://localhost:8080/giftcard.xml";
 var phoneLocalDriverOrdersUrl = "svarer_27-02-2013.xml";
-var fxlDriverOrdersUrl = "http://fluxloop.com/FetchdDiverTotalOrder.php?time=";
-var fxlLogUrl = "http://fluxloop.com/peppes/log.php"
+var fxlDriverOrdersUrl = "http://fluxloop.com/fetchdrivertotalorder.php?time=";
+var fxlLogUrl = "http://fluxloop.com/peppes/log.php";
 
 var peppesApiUrl = "https://www.peppes.no/peppesapi";
 var peppesVersionUrl = "http://fluxloop.com/peppesversion.php?bust="+Math.floor(Math.random()*100);
@@ -40,7 +42,7 @@ var desktopMode = false;
 var offlineMode = false;
 
 //Activities
-var activities = new Array();
+var activities = [];
 activities['OrderDelivered'] = 'OrderDelivered';
 activities['OrderDeliveredLate'] = 'OrderDeliveredLate';
 activities['OrderReturned'] = 'OrderDeliveredReturned';
@@ -53,14 +55,7 @@ activities['NewGiftCardIssued'] = 'NewGiftCardIssued';
 activities['OrderPaidByGiftCard'] = 'OrderPaidByGiftCard';
 
 function init() {
-    if (navigator.userAgent == "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17"
-        || navigator.userAgent == "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17"
-        || navigator.userAgent == "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.56 Safari/537.17"
-        || navigator.userAgent == "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.97 Safari/537.22"
-        || navigator.userAgent == "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.97 Safari/537.22"
-        || navigator.userAgent == "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.152 Safari/537.22"
-        ) {
-
+    if( navigator.userAgent == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36" ){
         if (desktopModePossible) {
             desktopMode = true;
             $("#desktopBackButton").show();
@@ -124,16 +119,26 @@ function onDeviceReady(){
 
     /* Version Check*/
     checkVersion();
+
+    addTouchListener("calculator", onCalculatorClick);
+    addTouchListener("padlock", onPadLockClick);
+    addTouchListener("reset", onResetClick);
+
+    if(desktopMode) {
+        $("#calculator").click(onCalculatorClick);
+        $("#reset").click(onResetClick);
+        $("#padlock").click(onPadLockClick);
+    }
 }
 
 function onBackKeyDown() {
     if (screenLevel == 0) {
         //Login screen
-        function onConfirmExit(button) {
+        var onConfirmExit = function(button) {
            if(button == 1) {
                exit();
            }
-        }
+        };
 
         if (desktopMode) {
             onConfirmExit(1);
@@ -161,13 +166,13 @@ function onBackKeyDown() {
         screenLevel = 2;
     } else if (screenLevel == 4) {
         //Payment screen
-        function onConfirmCancelPayment(button) {
+        var onConfirmCancelPayment = function(button) {
            if(button == 1) {
                hidePayment();
                showDestinationsDetails();
                screenLevel = 3;
            }
-        }
+        };
 
         if (desktopMode) {
             onConfirmCancelPayment(1);
@@ -212,13 +217,17 @@ function onBackKeyDown() {
         showAdvancedPayment();
     } else if (screenLevel == 11) {
         //Hide complaint selection screen. Show advanced payment
-        screenLevel = 8;
         hideComplaintSelection();
         showAdvancedPayment();
+        screenLevel = 8;
     } else if (screenLevel == 12) {
         hideComplaintOrderLineSelection();
         showComplaintSelection();
         screenLevel = 11;
+    } else if(screenLevel == 13) {
+        hideVerifyCellPhone();
+        showAdvancedPayment();
+        screenLevel = 8;
     }
 }
 
@@ -243,10 +252,17 @@ function hideVerifyCellPhone() {
     $("#verifyCellPhone" + lastOrderId).hide();
 }
 
+function showVerifyCellPhone() {
+    $("#reset").hide();
+    $("#calculator").hide();
+    $("#verifyCellPhone").show();
+    $("#verifyCellPhone" + lastOrderId).show();
+}
+
 function showDestinationInfo() {
     $('#tab2').removeClass('selected');
     $('#destinationItemList').hide();
-    
+
     $('#tab1').addClass('selected');
     $('#destinationInfo').show();
 }
@@ -254,7 +270,7 @@ function showDestinationInfo() {
 function showDestinationItemList() {
     $('#tab1').removeClass('selected');
     $('#destinationInfo').hide();
-    
+
     $('#tab2').addClass('selected');
     $('#destinationItemList').show();
 }
@@ -281,10 +297,10 @@ function hideComplaintSelection(orderId) {
     if(!orderId) {
         orderId = lastOrderId;
     }
-    
+
     $("#complaintSelectionHeader").hide();
     $("#complaintSelection").hide();
-    
+
 }
 
 function showComplaintOrderLineSelection() {
@@ -376,6 +392,10 @@ function hidePayment() {
     $("#calculator").hide();
 }
 
+function delayedExit() {
+    window.setTimeout(exit, 500);
+}
+
 function exit() {
     navigator.app.exitApp();
 }
@@ -386,17 +406,18 @@ function checkVersion() {
         url: peppesVersionUrl,
         dataType: "xml",
         success: function(xml) {
-        // var versionstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
-        var version = $(xml).children('version').text();
+            // var versionstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
+            var version = $(xml).children('version').text();
 
-        if (version=='2.1') {
-              //version ok
-        } else {
-            alert("Ny versjon finnes: "+version+" ");
-            $("#newVersion").show();
-        }},
-        error: function() { 
-            alert("Se etter ny versjon feilet."); 
+            if (version=='2.5') {
+                  //version ok
+            } else {
+                alert("Ny versjon finnes: "+version+" ");
+                $("#newVersion").show();
+            }
+        },
+        error: function() {
+            alert("Se etter ny versjon feilet.");
         }
     });
 }
@@ -413,29 +434,28 @@ function LogAppActivity(employeeId, orderId, activity) {
         success: function(result) {
             //Do nothing
         },
-        error: function() { 
+        error: function() {
             //Do nothing
-        } 
+        }
     });
 }
 
 function checkForConnectionAtLoad() {
-    var networkState = navigator.network.connection.type;
+    var networkState = (navigator.network !== undefined) ? navigator.network.connection.type : "desktop";
     if( !networkState || networkState=="none" ){
         alert("Mangler kontakt med nettverket, laster siste tur lagret i mobilen.");
         localstorageLoad();
         $("#offline").show();
         $(".button.offline").hide();
         return 0;
-    };
-    
+    }
+
     return 1;
 }
 
 function checkForConnection(){
-    var networkState = navigator.network.connection.type;
+    var networkState = (navigator.network !== undefined) ? navigator.network.connection.type : "desktop";
     if( !networkState || networkState == "none" ){
-
         if( $('#offline').is(':hidden') ) {
             alert("Ojda. Mobilen er uten dekning.");
         }
@@ -443,26 +463,26 @@ function checkForConnection(){
         $("#offline").show();
         $(".button.offline").hide();
         return false;
-    };
-    
+    }
+
     return true;
 }
 
 function doLogin(){
     $("#loader").show();
-    userpin = document.getElementById('pincode').value; 
-    
+    userpin = document.getElementById('pincode').value;
+
     $("#loginDiv").hide();
-    $("#welcome").hide(); 
+    $("#welcome").hide();
     $("#loader").show();
     loadXML(userpin);
-    
+
     Log(activities['Login']);
 }
 
 //Fired when an item is being touched.
 function onTouchStart(e) {
-    if(isTouching) return;
+    if(isTouching){ return; }
     var item = e.currentTarget;
     e.currentTarget.moved = false;
     isTouching = true;
@@ -497,19 +517,19 @@ function onListTouchEnd(e) {
     if (screenLocked && screenLevel == 1) {
         return;
     }
-    
+
     var item = e.currentTarget;
     if( !$(item).hasClass("selected") ) {
         item.className = "selected";
         $("#products-total").html($("#products-total").html()-1);
-        
+
         if ($("#products-total").html() == 0) {
             $("#productsDone").click(function () {
-                
+
                 if (screenLocked) {
                     return;
                 }
-                
+
                 $("#products").hide();
                 $("#productHeader").hide();
                 $("#destinationsList").show();
@@ -537,8 +557,8 @@ function onDestListTouchEnd(e) {
 
     var orderId = $(e.currentTarget).attr("title");
     lastOrderId = orderId;
-    
-    
+
+
     clickDelay(300); //prevent double firing of click event
     viewCustomer(orderId);
     window.setTimeout(setGoogleMapLinks, 250);
@@ -548,7 +568,7 @@ function setGoogleMapLinks(orderId) {
     if (!orderId) {
         orderId = lastOrderId;
     }
-    
+
     //Hack'n slash google maps link to support old versions of android (window.open doesn't do what we want).
     //Also prevent the anchor-tag to receive click-events when view is changed
     $("#" + orderId + "-mapaddr").attr('href', Basket[orderId]['googlemaps']);
@@ -574,12 +594,11 @@ function triggerOfflineSwap() {
 
 function onTab1TouchEnd(e) {
     showDestinationInfo();
- }
+}
 
 function onTab2TouchEnd(e) {
    showDestinationItemList();
- }
-
+}
 
 function loadXML(employeeId){
 
@@ -590,10 +609,10 @@ function loadXML(employeeId){
         xmlURL = phoneLocalDriverOrdersUrl;
         if(desktopMode) {
             xmlURL = localDriverOrdersUrl;
-        };
+        }
 
     } else {
-        //add a random parameter to avoid hitting cache 
+        //add a random parameter to avoid hitting cache
         xmlURL = peppesDriverOrdersUrl + "?employeeId=" + employeeId + "&rnd=" + GetUnixTime();
     }
 
@@ -604,11 +623,11 @@ function loadXML(employeeId){
         success: function(xml) {
             var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
             localStorage['xml'] = xmlstr;
-            localStorage['userID'] = employeeId; 
+            localStorage['userID'] = employeeId;
             parseXML(xml);
-           
-        }, 
-        
+
+        },
+
         error: function() {
             alert("Kunne ikke laste rute. Trolig server nedetid." + xmlURL);
             resetApp();
@@ -621,45 +640,60 @@ function parseXML(xml) {
         var errormessage = $(this).text();
         alert(errormessage);
     });
-    
+
     var totalorders = $(xml).find('employee').find('orders').text();
     if (totalorders == 0) {
         alert("Fant ingen ordrer.");
         resetApp();
+        document.getElementById('pincode').value = userpin;
+
         return;
     }
-    
+
     screenLevel = 1;
     $("#padlock").show();
     $("#productHeader").show();
+    var listItemCounter = 0;
     $(xml).find('group').each(function() {
         var groupName = $(this).attr("name");
         $("#productList").append("<div class='listheader'>" + groupName  + "</div>");
+        var dummySerialNo = 100;
         $(this).find("item").each(function() {
+            var listItemId = listItemCounter;
+            listItemCounter++;
             var serialno = $(this).attr("serialno");
             var listItemText;
+
             if (serialno) {
                 listItemText = "#" + Number(serialno);
             } else {
+                serialno = dummySerialNo;
+                dummySerialNo++;
                 listItemText = Number($(this).attr("qty")) + " stk";
             }
 
-            $("#productList").append("<div class='listitem'><a id='" + groupName + serialno + "'><strong>" + $(this).text() + "</strong><em>" + listItemText + "</em></a></div>");
+            var placementHtml = "";
+            var placement = $(this).attr("placement");
+            if (placement) {
+                placementHtml = "<span class=\"placement\">" + placement + "</span>";
+            }
+
+            $("#productList").append("<div class='listitem' style='line-height: inherit; height: inherit; position: relative;'><a id='" + groupName + "-" + serialno + "-" + listItemId + "'><strong>" + $(this).text() + "</strong><em>" + listItemText + "</em>" + placementHtml +"</a></div>");
         });
     });
-    
-    var links = document.querySelectorAll("#productList a") //All the li items on this page
+
+    var links = document.querySelectorAll("#productList a"); //All the li items on this page
     $("#products-total").html(links.length);
-    
+
     for(var i=0; i < links.length; ++i) {
         addTouchListener(links[i].id, onListTouchEnd);
     }
-    
+
     if (desktopMode) {
         $("#products .listitem").click(
             function() {
                 $("#products-total").html($("#products-total").html()-1);
-                
+
                 if ($("#products-total").html() == 0) {
                     $("#productsDone").click(function () {
                         $("#products").hide();
@@ -669,45 +703,36 @@ function parseXML(xml) {
                         $("#destinationsListHeader").show();
                         screenLevel = 2;
                     });
-                    
+
                     $("#productsDone").removeClass('disabled');
                     $("#productsDone").addClass('enabled');
                 }
-            });
+            }
+        );
     }
 
-    addTouchListener("calculator", onCalculatorClick);
-    addTouchListener("padlock", onPadLockClick);
-    addTouchListener("reset", onResetClick);
-    
-    if(desktopMode) {
-        $("#calculator").click(onCalculatorClick);
-        $("#reset").click(onResetClick);
-        $("#padlock").click(onPadLockClick);
-    }
-    
     var discountCodeCount = 0;
     $(xml).find("discountCode").each(function() {
         var code = $(this).attr("code");
         var description = $(this).attr("description");
-        DiscountCodes[discountCodeCount] = new Array();
+        DiscountCodes[discountCodeCount] = [];
         DiscountCodes[discountCodeCount]['code'] = code;
         DiscountCodes[discountCodeCount]['description'] = description;
         discountCodeCount++;
     });
     createDiscountCodeMarkup();
-    
+
     var complaintCodeCount = 0;
     $(xml).find("complaintCode").each(function() {
         var code = $(this).attr("code");
         var description = $(this).attr("description");
-        ComplaintCodes[complaintCodeCount] = new Array();
+        ComplaintCodes[complaintCodeCount] = [];
         ComplaintCodes[complaintCodeCount]['code'] = code;
         ComplaintCodes[complaintCodeCount]['description'] = description;
         complaintCodeCount++;
     });
     createComplaintCodeMarkup();
-    
+
     $(xml).find('order').each(function() {
         var orderId = $(this).attr("id");
         var currentOrdertime = $(this).attr("timestamp");
@@ -719,33 +744,33 @@ function parseXML(xml) {
         var deviceWidth = $(window).width();
         var cellPhoneNumber = $(this).attr("orderphone");
         var orderDiscount = $(this).attr("orderDiscount");
-        
+
         if (!orderDiscount) {
             orderDiscount = 0;
         } else {
             orderDiscount = Number(orderDiscount);
         }
-        
+
         var customerAdr = $(this).find("streetname").text() + " "
-            + $(this).find("streetnumber").text() 
+            + $(this).find("streetnumber").text()
             + $(this).find("streetletter").text();
 
         var customerCity = $(this).find("city").text();
-        
+
         if (preorder=="true") {
             $(".preorder").show();
-            $("#destinationList .preorder").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>"); 
+            $("#destinationList .preorder").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
             $("#destinationList .preorder #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class=''>"+timeFromUnix(deliveryWithin)+"</em></a>");
         } else {
-            $("#destinationList .normal").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>"); 
-            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+currentOrdertime+"'></em></a>");  
+            $("#destinationList .normal").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
+            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+currentOrdertime+"'></em></a>");
         }
 
         addTouchListener("listItem" + orderId, onDestListTouchEnd);
         if(desktopMode) {
             if (preorder == "true") {
                 $("#destinationList .preorder #listItem"+orderId).click(
-                    function(e) { 
+                    function(e) {
                         viewCustomer(orderId);
                     });
             } else {
@@ -755,62 +780,65 @@ function parseXML(xml) {
                     });
             }
         }
-        
-        Basket[orderId] = new Array();
+
+        Basket[orderId] = [];
         Basket[orderId]['baseOrderTotal'] = orderTotal;
         Basket[orderId]['baseOrderTotalRebate'] = (orderTotal / 2);
         Basket[orderId]['lateDelivery'] = 0;
         Basket[orderId]['orderDiscount'] = orderDiscount;
         Basket[orderId]['originalOrderTotal'] = orderTotal + orderDiscount; //Discount is already subtracted from order total. To get original value, add ordertotal and discount.
         Basket[orderId]['paymentType'] = payment;
-        
+
         /* destination details */
         $("#destinationsDetails #destinationInfo").append("<div class='destinationsDetailsItem' style='display:none;' id='detailsItem" + orderId + "'></div>");
         var customerName = $(this).find("firstname").text() + " " + $(this).find("lastname").text();
-        var customerPhone = $(this).find("phone").text(); 
-        var customerInfo = $(this).find("info").text(); 
+        var customerPhone = $(this).find("phone").text();
+        var customerInfo = $(this).find("info").text();
+        var customerEmail = $(this).find("email").text();
+
+        Basket[orderId]['emailAddress'] = customerEmail;
 
         $("#destinationsDetails #destinationInfo #detailsItem"+orderId)
-        .append("<h2>" + customerName + "<em class='timestamp' title='"+currentOrdertime+"'></em></h2>")
-        .append("<ul class='icon'></ul>");
+            .append("<h2>" + customerName + "<em class='timestamp' title='"+currentOrdertime+"'></em></h2>")
+            .append("<ul class='icon'></ul>");
 
         $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul")
-        .append("<li><a href='#' id='" + orderId + "-mapimage' href=''><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></div></li>")
-        .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href=''>" + customerAdr + "</a></li>")
-        .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
+            .append("<li><a href='#' id='" + orderId + "-mapimage' href=''><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></div></li>")
+            .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href=''>" + customerAdr + "</a></li>")
+            .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
 
         var googleMapsUrl = "http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=" + encodeURIComponent(customerAdr) + "," + encodeURIComponent(customerCity) + "&aq=1&t=m&z=11&iwloc=A";
         //var geoUrl = "geo:0,0?q="  + encodeURIComponent(customerAdr) + "+" + encodeURIComponent(customerCity) + "&aq=1&t=m&z=11&iwloc=A";
         Basket[orderId]['googlemaps'] = googleMapsUrl;
-        
+
         if (desktopMode) {
             setGoogleMapLinks(orderId);
         }
-        
+
         $("#destinationsDetails #destinationInfo #detailsItem"+orderId)
-        .append("<div class='info'><p>" + customerInfo + "</p></div>")
-        .append("<div class='button' onclick='arriveAtCustomer();'><div>Fremme hos kunde</div></div>");
+            .append("<div class='info'><p>" + customerInfo + "</p></div>")
+            .append("<div class='button' onclick='arriveAtCustomer();'><div>Fremme hos kunde</div></div>");
 
         /* Build the itemlist pr destination and complaint list */
         $("#destinationsDetails #destinationItemList").append("<div class='destinationsDetailsList' style='display:none;' id='detailsList" + orderId + "'></div>");
         $("#detailsList"+orderId).append("<h2>" + customerName + "<em class='timestamp' title='" + currentOrdertime + "'></em></h2>")
-        .append("<ul><li>L&oslash;penummer #" + serialno + "</li></ul>");
-        
+            .append("<ul><li>L&oslash;penummer #" + serialno + "</li></ul>");
+
         $("#complaintOrderLineSelection").append("<div class='complaintOrderLineList' style='display:none;' id='complaintOrderLineList" + orderId + "'></div>");
         var $complaintList = $("#complaintOrderLineList" + orderId);
         $complaintList.append("<div id='complaintOrderLineList" + orderId + "Title' class='listheader'></div>");
-        
+
         $(this).find("orderline").each(function() {
             var orderLineLi;
             var price = Number($(this).attr("price"));
             if (price > 0) {
                 var qty = Number($(this).attr("qty"));
                 orderLineLi = "<li>" + qty + " stk " + $(this).text() + "<strong>&agrave; " + price + " kr</strong></li>";
-                
+
                 var orderLineNumber = $(this).attr("number");
                 $complaintList.append("<div id=" + orderId + "-" + orderLineNumber + " class='listitem'><div class='tap' title='" + orderLineNumber + "'>" + $(this).text() + "</div></div>");
                 addTouchListener(orderId + "-" + orderLineNumber, onComplaintOrderLineSelected);
-                
+
                 if (desktopMode) {
                     $("#" + orderId + "-" + orderLineNumber).click(function(e) {
                         onComplaintOrderLineSelected(e);
@@ -822,94 +850,93 @@ function parseXML(xml) {
 
             $("#destinationsDetails #destinationItemList #detailsList" + orderId + " ul").append(orderLineLi);
         });
-        
-        $complaintList
-        .append("<div id='" + orderId + "-ComplaintOK' class='button'><div>Ok</div></div>");
+
+        $complaintList.append("<div id='" + orderId + "-ComplaintOK' class='button'><div>Ok</div></div>");
         addTouchListener(orderId + "-ComplaintOK", completeComplaintOrderLineSelection);
         if (desktopMode) {
             $("#" + orderId + "-ComplaintOK").click(function(e) {
                 completeComplaintOrderLineSelection();
             });
         }
-        
+
         if (cellPhoneNumber) {
             Basket[orderId]['cellPhoneNumber'] = cellPhoneNumber;
         }
 
         /* Payment */
-        PaymentMethods[orderId] = new Array();
+        PaymentMethods[orderId] = [];
         var paymentMethodCount = 0;
         $(this).find("paymentMethod").each(function() {
-            PaymentMethods[orderId][paymentMethodCount] = new Array();
+            PaymentMethods[orderId][paymentMethodCount] = [];
             var code = $(this).attr("code");
             var gratuityAllowed = $(this).attr("gratuityAllowed");
             var description = $(this).attr("description");
             var complaintCodeRequired = $(this).attr("complaintCodeRequired");
             var discountCodeRequired = $(this).attr("discountCodeRequired");
-            
+
             PaymentMethods[orderId][paymentMethodCount]['code'] = code;
             PaymentMethods[orderId][paymentMethodCount]['gratuityAllowed'] = gratuityAllowed;
             PaymentMethods[orderId][paymentMethodCount]['description'] = description;
             PaymentMethods[orderId][paymentMethodCount]['complaintCodeRequired'] = complaintCodeRequired;
             PaymentMethods[orderId][paymentMethodCount]['discountCodeRequired'] = discountCodeRequired;
-            
+
             if (!GlobalPaymentMethods[code]) {
-                GlobalPaymentMethods[code] = new Array();
+                GlobalPaymentMethods[code] = [];
                 GlobalPaymentMethods[code]['gratuityAllowed'] = gratuityAllowed;
                 GlobalPaymentMethods[code]['description'] = description;
                 GlobalPaymentMethods[code]['complaintCodeRequired'] = complaintCodeRequired;
                 GlobalPaymentMethods[code]['discountCodeRequired'] = discountCodeRequired;
             }
-            
+
             Basket[orderId][code] = 1;
             Basket[orderId][code + 'gratuityAllowed'] = gratuityAllowed;
             if (code == paymentMethodGiftCard) {
                 Basket[orderId][code + 'gratuityAllowed'] = 'true';
                 PaymentMethods[orderId]['gratuityAllowed'] = 'true';
             }
-            
+
             paymentMethodCount++;
         });
 
         var sumPaymentListText = "<div class='sumList' id='sumPaymentList" + orderId + "'><ul></ul></div>";
         var sumDetailsListText = "<div class='sumDetailsList' id='sumDetailsList" + orderId + "'><ul></ul></div>";
-        
+
         var egcPaymentListText = "<div class='egcList' id='egcPaymentList" + orderId + "'><ul></ul></div>";
         var egcDetailsListText = "<div class='egcDetailsList' id='egcDetailsList" + orderId + "'><ul></ul></div>";
-        
+
         var grandTotalsPaymentListText = "<div class='grandTotalsList' id='grandTotalsPaymentList" + orderId + "'><ul></ul></div>";
         var grandTotalsDetailsListText = "<div class='grandTotalsDetailsList' id='grandTotalsDetailsList" + orderId + "'><ul></ul></div>";
-        
+
         $("#detailsList"+orderId)
-        .append(sumDetailsListText)
-        .append(egcDetailsListText)
-        .append(grandTotalsDetailsListText);
-        
+            .append(sumDetailsListText)
+            .append(egcDetailsListText)
+            .append(grandTotalsDetailsListText);
+
         $("#payment #totals").append("<div class='paymentDetailsList' style='display:none;' id='paymentDetails" + orderId + "'></div>");
         $("#payment #totals #paymentDetails" + orderId).append(sumPaymentListText)
-        .append(egcPaymentListText)
-        .append(grandTotalsPaymentListText);
-        
+            .append(egcPaymentListText)
+            .append(grandTotalsPaymentListText);
+
         $("#payment #paymentButtons").append("<div style='display:none;' class='paymentSelection' id='paymentSelection" + orderId + "'></div>");
-        
+
         var orderDiscountText = "";
-        
+
         var subTotalStyle = "display: none";
         if (Basket[orderId]['orderDiscount'] > 0) {
             orderDiscountText = "<li style='color: green'>Avslag <strong>-" + Basket[orderId]['orderDiscount'] + " kr</strong></li>";
             subTotalStyle = "";
         }
-        
+
         var subTotalPaymentText = "<li id='subTotalPayment" + orderId + "' style='" + subTotalStyle + "'>Subtotal <strong>" + Basket[orderId]['originalOrderTotal'] + " kr</strong></li>";
         var subTotalDetailsText = "<li id='subTotalDetails" + orderId + "' style='" + subTotalStyle + "'>Subtotal <strong>" + Basket[orderId]['originalOrderTotal'] + " kr</strong></li>";
-        
+
         var grandTotalsDetailsText = "<li id='grandTotalsDetails" + orderId + "'>&Aring; betale <strong> " + Basket[orderId]['baseOrderTotal'] + " kr</strong></li>";
         var grandTotalsPaymentText = "<li id='grandTotalsPayment" + orderId + "'>&Aring; betale <strong> " + Basket[orderId]['baseOrderTotal'] + " kr</strong></li>";
 
-        var grandTotalsRebatePaymentText = "<li style='display: none' id='discountPayment" + orderId + "' class='rebate'>Rabatt 50%<strong>-" 
+        var grandTotalsRebatePaymentText = "<li style='display: none' id='discountPayment" + orderId + "' class='rebate'>Rabatt 50%<strong>-"
         + Basket[orderId]['baseOrderTotalRebate'] + " kr</strong></li>";
 
-        var grandTotalsRebateDetailsText = "<li style='display: none' id='discountDetails" + orderId + "' class='rebate'>Rabatt 50%<strong>-" 
+        var grandTotalsRebateDetailsText = "<li style='display: none' id='discountDetails" + orderId + "' class='rebate'>Rabatt 50%<strong>-"
         + Basket[orderId]['baseOrderTotalRebate'] + " kr</strong></li>";
 
         $("#sumDetailsList" + orderId + " ul")
@@ -928,57 +955,61 @@ function parseXML(xml) {
 
         if (payment == "credit") {
             $("#detailsList"+orderId)
-            .append("<div class='button sign offline' id='showSignButton" + orderId + "' onclick='sign(" + orderId + ");'><div>Signatur</div></div>");
+                .append("<div class='button sign offline' id='showSignButton" + orderId + "' onclick='sign(" + orderId + ");'><div>Signatur</div></div>");
 
             $("#signButtons")
-            .append('<div class="button buttons2" id="signButton'+orderId+'" style="display:none" onClick="signSave(' + orderId + ')"><div>Lagre</div></div>');
+                .append('<div class="button buttons2" id="signButton'+orderId+'" style="display:none" onClick="signSave(' + orderId + ')"><div>Lagre</div></div>');
 
-            var deliveryLateText = "<div class='deliveryLate tap'><div title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
+            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div><input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
+
+            var deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
             if (desktopMode) {
-                deliveryLateText = "<div class='deliveryLate tap'><div title='" + orderId + "' id='deliveryLateItem" + orderId + "' onclick='deliveryLateClick(" + orderId + ")'>Forsinket levering (50% rabatt)</div></div>";
+                deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "' onclick='deliveryLateClick(" + orderId + ")'>Forsinket levering (50% rabatt)</div></div>";
             }
-            
+
             $("#payment #paymentButtons #paymentSelection" + orderId)
-            .append(deliveryLateText)
-            .append("<div class='separator'>&nbsp;</div>")
-            .append("<div class='button delivery offline' id='deliveryButton" + orderId + "' onclick='completePayment(" + orderId + ", -1);' style='display:none' ><div>Levert til kunde</div></div>");
-            
+                .append(deliveryLateText)
+                .append("<div class='separator'>&nbsp;</div>")
+                .append(emailText)
+                .append("<div class='separator'>&nbsp;</div>")
+                .append("<div class='button delivery offline' id='deliveryButton" + orderId + "' onclick='completePayment(" + orderId + ", -1);' style='display:none' ><div>Levert til kunde</div></div>");
+
             addTouchListener("deliveryLateItem" + orderId, deliveryLateTouchEnd);
-            
+
             /* Advanced payment credit */
             createAdvancedPaymentMarkup(orderId);
         } else {
-            Giftcards[orderId] = new Array();
+            Giftcards[orderId] = [];
             if ($(this).find("giftcard").size() > 0) {
-                
+
                 $("#sumPaymentList" + orderId + " ul")
-                .append(subTotalPaymentText);
-                
+                    .append(subTotalPaymentText);
+
                 $("#grandTotalsPaymentList" + orderId + " ul")
-                .append(grandTotalsRebatePaymentText);
-                
+                    .append(grandTotalsRebatePaymentText);
+
                 //Always show when giftcards are present
                 $("#subTotalPayment" + orderId).show();
                 $("#subTotalDetails" + orderId).show();
-                
+
                 var cardCount = 0;
                 $(this).find("giftcard").each(function() {
                     var giftCardId = $(this).attr("id");
                     var giftCardValue = Number($(this).attr("amount"));
-                    
+
                     $("#egcDetailsList" + orderId + " ul")
-                    .append("<li id='detailsGiftCardItem" + giftCardId + "' class='giftCard enabled' >Gavekort - " + giftCardId + "<strong> -" + giftCardValue + " kr</strong></li>");
-                    
+                        .append("<li id='detailsGiftCardItem" + giftCardId + "' class='giftCard enabled' >Gavekort - " + giftCardId + "<strong> -" + giftCardValue + " kr</strong></li>");
+
                     var ecgPaymentListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + giftCardValue + " kr</strong></div></li>";
                     if (desktopMode) {
-                        ecgPaymentListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "' onclick='giftCardClick(" + giftCardId + ","+ orderId + ")'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + giftCardValue + " kr</strong></div></li>"
+                        ecgPaymentListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "' onclick='giftCardClick(" + giftCardId + ","+ orderId + ")'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + giftCardValue + " kr</strong></div></li>";
                     }
-                    
+
                     $("#egcPaymentList" + orderId + " ul")
-                    .append(ecgPaymentListItem);
+                        .append(ecgPaymentListItem);
                     addTouchListener('paymentGiftCardItem' + giftCardId, onGiftCardTouchEnd);
-                    
-                    Giftcards[orderId][cardCount] = new Array();
+
+                    Giftcards[orderId][cardCount] = [];
                     Giftcards[orderId][cardCount]['id'] = giftCardId;
                     Giftcards[orderId][cardCount]['value'] = giftCardValue;
                     Giftcards[orderId][cardCount]['status'] = 1;
@@ -986,12 +1017,14 @@ function parseXML(xml) {
                 });
             } else {
                 $("#payment #totals #paymentDetails" + orderId + " ul")
-                .append(grandTotalsRebatePaymentText);
+                    .append(grandTotalsRebatePaymentText);
             }
 
             $("#detailsList" + orderId)
-            .append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
-            .append("<div class='button buttons2 delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
+                .append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
+                .append("<div class='button buttons2 delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
+
+            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div><input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
             var deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
             if (desktopMode) {
@@ -1010,32 +1043,34 @@ function parseXML(xml) {
 
             var giftCardButton = "<div class='button buttons2 delivery offline cash' id='giftCardButton" + orderId + "' onclick='addGiftCardClick(" + orderId + ");' ><div>Gavekort</div></div>";
             var verifyCellPhoneButton = "<div class='button buttons2 delivery offline card' id='completeButton" + orderId + "' style='display: none' onclick='verifyCellPhoneNumber(" + orderId + ")'><div>Neste</div></div>";
-            
+
             $("#payment #paymentButtons #paymentSelection" + orderId)
-            .append(deliveryLateText)
-            .append("<div class='separator'>&nbsp;</div>")
-            .append(cashButton)
-            .append(giftCardButton)
-            .append(cardButton)
-            .append(verifyCellPhoneButton);
+                .append(deliveryLateText)
+                .append("<div class='separator'>&nbsp;</div>")
+                .append(emailText)
+                .append("<div class='separator'>&nbsp;</div>")
+                .append(cashButton)
+                .append(giftCardButton)
+                .append(cardButton)
+                .append(verifyCellPhoneButton);
 
             addTouchListener("deliveryLateItem"+orderId, deliveryLateTouchEnd);
 
             /* Verify cell phone */
             $("#verifyCellPhone").append("<div style='display: none' id='verifyCellPhone" + orderId + "'></div>");
             $("#verifyCellPhone" + orderId)
-            .append("<label for='cellphone" + orderId + "'>Telefonnummer for gavekort:</label>")
-            .append("<input class='paymentValue' type='number' name='cellPhoneNumber" + orderId + "' id='cellPhoneNumber" + orderId + "' value='" + Basket[orderId]['cellPhoneNumber'] + "'>")
-            .append("<div class='button buttons2 partialPaymentCancel' onclick='cancelCellPhone(" + orderId + ")'><div>Avbryt</div></div>")
-            .append("<div class='button buttons2 offline delivery partialPayment' onclick='completeCellPhone(" + orderId + ")'><div>Fullf&oslash;r</div></div>");
-            
+                .append("<label for='cellphone" + orderId + "'>Telefonnummer for gavekort:</label>")
+                .append("<input class='paymentValue' type='number' name='cellPhoneNumber" + orderId + "' id='cellPhoneNumber" + orderId + "' value='" + Basket[orderId]['cellPhoneNumber'] + "'>")
+                .append("<div class='button buttons2 partialPaymentCancel' onclick='cancelCellPhone(" + orderId + ")'><div>Avbryt</div></div>")
+                .append("<div class='button buttons2 offline delivery partialPayment' onclick='completeCellPhone(" + orderId + ")'><div>Fullf&oslash;r</div></div>");
+
             /* Add gift card*/
             $("#addGiftCard").append("<div style='display: none' id='addGiftCard" + orderId + "'></div>");
             $("#addGiftCard" + orderId).append("<label for='addGiftCardNumber" + orderId + "'>Gavekortnummer:</label>")
-            .append("<input class='paymentValue' type='number' name='addGiftCardNumber" + orderId + "' id='addGiftCardNumber" + orderId + "'>")
-            .append("<div class='button buttons2 partialPaymentCancel' onclick='cancelAddGiftCard(" + orderId + ")'><div>Avbryt</div></div>")
-            .append("<div class='button buttons2 offline delivery partialPayment' onclick='completeAddGiftCard(" + orderId + ")'><div>Legg til</div></div>");
-            
+                .append("<input class='paymentValue' type='number' name='addGiftCardNumber" + orderId + "' id='addGiftCardNumber" + orderId + "'>")
+                .append("<div class='button buttons2 partialPaymentCancel' onclick='cancelAddGiftCard(" + orderId + ")'><div>Avbryt</div></div>")
+                .append("<div class='button buttons2 offline delivery partialPayment' onclick='completeAddGiftCard(" + orderId + ")'><div>Legg til</div></div>");
+
             /* Advanced payment */
             createAdvancedPaymentMarkup(orderId);
         }
@@ -1070,19 +1105,19 @@ function onDiscountCodeSelected(e) {
     var idx = parts[0];
     var discountText = "Rabattkode: <span name='" + DiscountCodes[idx]['code'] + "'>" + DiscountCodes[idx]['description'] + "</span>";
     var $discountLi = $("#" + lastPaymentCode + "-" +lastOrderId + "-discount");
-    
+
     $discountLi.html(discountText);
     if (!$discountLi.hasClass('selected')) {
         $discountLi.addClass('selected');
     }
-    
+
     if (!Basket[lastOrderId]['discounts']) {
-        Basket[lastOrderId]['discounts'] = new Array();
+        Basket[lastOrderId]['discounts'] = [];
     }
-    
+
     Basket[lastOrderId]['discounts']['status'] = 1;
     Basket[lastOrderId]['discounts']['idx'] = idx;
-    
+
     hideDiscountSelection();
     showAdvancedPayment();
     screenLevel = 8;
@@ -1100,7 +1135,7 @@ function onComplaintOrderLineSelected(e) {
     } else {
         $tapItem.addClass('selected');
     }
-    
+
     clickDelay(300);
 }
 
@@ -1111,15 +1146,15 @@ function completeComplaintOrderLineSelection(e) {
 
     $("#complaintOrderLineList" + orderId + " .selected").each(function() {
         var number = $(this).attr('title');
-        complaintOrderLineList += ampersand + "complaintLine=" + number;
+        complaintOrderLineList += ampersand + "complaintOrderLine=" + number;
         ampersand = "&";
     });
-    
+
     if (complaintOrderLineList === '') {
         alert('Velg minst en ordrelinje');
         return;
     }
-    
+
     Basket[orderId]['complaintOrderLineList'] = complaintOrderLineList;
     hideComplaintOrderLineSelection();
     showAdvancedPayment();
@@ -1130,7 +1165,7 @@ function createComplaintCodeMarkup() {
     for(var idx = 0; idx < ComplaintCodes.length; idx++) {
         $("#complaintSelection").append("<div class='listitem' id='" + idx + "-" + ComplaintCodes[idx]['code'] + "'><strong>" + ComplaintCodes[idx]['description'] + "</strong></div>");
         addTouchListener(idx + "-" + ComplaintCodes[idx]['code'], onComplaintCodeSelected);
-        
+
         if (desktopMode) {
             $("#" + idx + "-" + ComplaintCodes[idx]['code']).click(function(e) {
                 onComplaintCodeSelected(e);
@@ -1145,21 +1180,21 @@ function onComplaintCodeSelected(e) {
     var idx = parts[0];
     var complaintText = "Reklamasjonskode: <span name='" + ComplaintCodes[idx]['code'] + "'>" + ComplaintCodes[idx]['description'] + "</span>";
     var $complaintLi = $("#" + lastPaymentCode + "-" +lastOrderId + "-complaint");
-    
+
     $complaintLi.html(complaintText);
     if (!$complaintLi.hasClass('selected')) {
         $complaintLi.addClass('selected');
     }
-    
+
     if (!Basket[lastOrderId]['complaints']) {
-        Basket[lastOrderId]['complaints'] = new Array();
+        Basket[lastOrderId]['complaints'] = [];
     }
-    
+
     Basket[lastOrderId]['complaints']['status'] = 1;
     Basket[lastOrderId]['complaints']['idx'] = idx;
-    
+
     $("#complaintOrderLineList" + lastOrderId + "Title").html(ComplaintCodes[idx]['description'] + " gjelder for:");
-    
+
     hideComplaintSelection();
     clickDelay(300);
     showComplaintOrderLineSelection();
@@ -1170,13 +1205,13 @@ function createAdvancedPaymentMarkup(orderId) {
     $("#advancedPayment").append("<div style='display: none' class='advancedPayment' id='advancedPayment" + orderId + "'><ul></ul></div>");
     $("#advancedPayment" + orderId + " ul")
         .append("<li>Bel&oslash;p <em>" + Basket[orderId]['originalOrderTotal'] + "</em></li>");
-    
+
     for(var idx = 0; idx < PaymentMethods[orderId].length; idx++) {
         var pm = PaymentMethods[orderId][idx];
         if (pm['code'] == paymentMethodGiftCard || pm['code'] == paymentMethodLateDelivery) {
             continue;
         }
-        
+
         $("#advancedPayment" + orderId + " ul").append("<li id='" + pm['code'] + "-" + orderId + "-li'>" + pm['description'] + " <input id='" + pm['code'] + "-" + orderId + "' name='" + pm['code'] + "' class='payable' type='number' value=''/></li>");
         if (pm['discountCodeRequired'] == 'true') {
             $("#" + pm['code'] + "-" + orderId + "-li input").removeClass('payable').addClass('subtractable');
@@ -1186,7 +1221,7 @@ function createAdvancedPaymentMarkup(orderId) {
                 onDiscountValueChanged(e);
             });
         }
-        
+
         if(pm['complaintCodeRequired'] == 'true') {
             $("#" + pm['code'] + "-" + orderId + "-li input").removeClass('payable').addClass('subtractable');
             var $advPaymentLi = $("#" + pm['code'] + "-" + orderId + "-li");
@@ -1196,7 +1231,7 @@ function createAdvancedPaymentMarkup(orderId) {
             });
         }
     }
-    
+
     if (Giftcards[orderId]) {
         $("#advancedPayment" + orderId + " ul")
             .append("<li class='egcStart' id='egcStart" + orderId + "'>&nbsp;</li>");
@@ -1206,35 +1241,38 @@ function createAdvancedPaymentMarkup(orderId) {
             var egcValue = Giftcards[orderId][i]['value'];
             if (egcStatus) {
                 $("#advancedPayment" + orderId + " ul")
-                    .append("<li><div class='egc enabled' id='advancedPaymentGiftCardItem" + egcId + "'>EGK-" + egcId + "<input name='" + paymentMethodGiftCard + "' class='subtractable egc' type='number' disabled='disabled' value='" + egcValue + "'/></div></li>");
+                    .append("<li><div class='egc enabled' id='advancedPaymentGiftCardItem" + egcId + "'>EGK-" + egcId + "<input name='" + paymentMethodGiftCard + "' class='egc' type='number' disabled='disabled' value='" + egcValue + "'/></div></li>");
             } else {
                 $("#advancedPayment" + orderId + " ul")
                     .append("<li><div class='egc' id='advancedPaymentGiftCardItem" + egcId + "'>EGK-" + egcId + "<input name='" + paymentMethodGiftCard + "' class='egc' type='number' disabled='disabled' value='" + egcValue + "'/></div></li>");
             }
         }
     }
-    
+
      orderDiscountAdvancedPaymentText = "";
      if (Basket[orderId]['orderDiscount'] > 0) {
-          orderDiscountAdvancedPaymentText = "<li style='color: green'>Avslag <em>-" + Basket[orderId]['orderDiscount'] + " kr</em></li>"
+          orderDiscountAdvancedPaymentText = "<li style='color: green'>Avslag <em>-" + Basket[orderId]['orderDiscount'] + " kr</em></li>";
      }
-     
+
      $("#advancedPayment" + orderId + " ul")
         .append(orderDiscountAdvancedPaymentText)
         .append("<li><div class='lateDelivery tap' id='lateDeliveryCheckbox" + orderId + "'>Forsinket levering (50% rabatt)<input type='number' class='lateDelivery' disabled='disabled' value='" + Basket[orderId]['baseOrderTotalRebate'] + "'/></div></li>")
         .append("<li id='advancedPaymentRemaining" + orderId + "' class='title'>Gjenst&aring;ende &aring; betale</li>")
-        .append("<li id='advancedPaymentTip" + orderId + "' class='title'>Tips</li>")
-        .append("<div class='button buttons2 partialPaymentCancel' onclick='cancelAdvancedPayment(" + orderId + ")'><div>Avbryt</div></div>")
-        .append("<div class='button buttons2 offline delivery partialPayment'  onclick='completeAdvancedPayment(" + orderId + ")'><div style='color: green;'>Fullf&oslash;r</div></div>");
-    
+        .append("<li id='advancedPaymentTip" + orderId + "' class='title'>Tips</li>");
+
+    $("#advancedPayment" + orderId).append("<div id='advancedPaymentButtons" + orderId + "'></div>");
+    $("#advancedPaymentButtons" + orderId)
+        .append("<div id='cancelAdvancedPayment" + orderId + "' class='button buttons2 partialPaymentCancel' onclick='cancelAdvancedPayment(" + orderId + ")'><div>Avbryt</div></div>")
+        .append("<div id='completeAdvancedPayment" + orderId + "' class='button buttons2 offline delivery partialPayment'  onclick='completeAdvancedPayment(" + orderId + ")'><div style='color: green;'>Fullf&oslash;r</div></div>")
+        .append("<div id='newGiftCard" + orderId + "' style='display: none' class='button buttons2 offline delivery partialPayment'  onclick='verifyCellPhoneNumberAdvancedPayment(" + orderId + ")'><div style='color: green;'>Neste</div></div>");
     addTouchListener("lateDeliveryCheckbox"+orderId, onLateDeliveryCheckboxClicked);
-    
+
     if (desktopMode) {
         $("#lateDeliveryCheckbox" + orderId).click(function(e) {
             onLateDeliveryCheckboxClicked(e);
         });
     }
-    
+
     $("#advancedPayment" + orderId + " ul").focusout(function() {
         calculateAdvancedPayment();
     });
@@ -1242,7 +1280,7 @@ function createAdvancedPaymentMarkup(orderId) {
 
 function onResetClick(e) {
      $("#advancedPayment" + lastOrderId + " ul li input").each(function() {
-        if (!$(this).hasClass('lateDelivery')) {
+        if (!$(this).hasClass('lateDelivery') && !$(this).hasClass('egc')) {
             $(this).val('0');
             $(this).trigger('focusout');
         }
@@ -1261,7 +1299,7 @@ function onDiscountValueChanged (e) {
         if($discountCodeLi.hasClass('disabled')) {
             $discountCodeLi.removeClass('disabled');
             addTouchListener($discountCodeLi.attr('id'), onDiscountClick);
-            
+
             if (desktopMode) {
                 $discountCodeLi.click(function(e) {
                     onDiscountClick(e);
@@ -1272,7 +1310,7 @@ function onDiscountValueChanged (e) {
         $discountInput.val('0');
         if(!$discountCodeLi.hasClass('disabled')) {
             $discountCodeLi.addClass('disabled');
-            
+
             if (desktopMode) {
                 $discountCodeLi.click = null;
             }
@@ -1306,7 +1344,7 @@ function onComplaintValueChanged (e) {
         if($complaintCodeLi.hasClass('disabled')) {
             $complaintCodeLi.removeClass('disabled');
             addTouchListener($complaintCodeLi.attr('id'), onComplaintClick);
-            
+
             if (desktopMode) {
                 $complaintCodeLi.click(function(e) {
                     onComplaintClick(e);
@@ -1317,7 +1355,7 @@ function onComplaintValueChanged (e) {
         $complaintInput.val('0');
         if(!$complaintCodeLi.hasClass('disabled')) {
             $complaintCodeLi.addClass('disabled');
-            
+
             if (desktopMode) {
                 $complaintCodeLi.click = null;
             }
@@ -1344,11 +1382,11 @@ function clickDelay(duration) {
     if (ignoreClick) {
         return;
     }
-    
+
     if(!duration || duration < 0) {
         duration = 300;
     }
-    
+
     ignoreClick = true;
     window.setTimeout(swapClick, duration);
 }
@@ -1365,11 +1403,27 @@ function cancelAdvancedPayment() {
     onBackKeyDown();
 }
 
+function calculateGiftCardTotalValue(orderId) {
+    var giftcardTotal = 0;
+    if (Giftcards[orderId]) {
+        for (var i = 0; i < Giftcards[orderId].length; i++) {
+            if (Giftcards[orderId][i]['status'] == 1) {
+                giftcardTotal += Number(Giftcards[orderId][i]['value']);
+            }
+        }
+    }
+
+    return giftcardTotal;
+}
+
 function calculateAdvancedPayment(orderId) {
     if(!orderId) {
         orderId = lastOrderId;
     }
-    
+
+    Basket[orderId]['paidByGiftCard'] = 0;
+    Basket[orderId]['issueGiftCard'] = 0;
+
     var orderTotal = Number(Basket[orderId]['baseOrderTotal']);
     if (Basket[orderId]['lateDelivery'] == 1) {
         orderTotal = Number(Basket[orderId]['baseOrderTotalRebate']);
@@ -1377,23 +1431,21 @@ function calculateAdvancedPayment(orderId) {
     } else {
         $("#lateDeliveryCheckbox" + lastOrderId).removeClass('selected');
     }
-    
-    
-    var totalPaid = 0;
+
     var totalPaidGratuityAllowed = 0;
     var totalPaidNoGratuity = 0;
     $("#advancedPayment" + orderId + " input.subtractable").each( function() {
-        var amount = Number($(this).val()); 
+        var amount = Number($(this).val());
         if (!amount) {
             return;
         }
-        
+
         if (amount < 0) {
             amount = 0;
             $(this).val(amount);
             return;
         }
-        
+
         var code = $(this).attr('name');
         if(Basket[orderId][code + 'gratuityAllowed'] == 'false') {
             if ((amount + totalPaidNoGratuity) > orderTotal) {
@@ -1403,67 +1455,100 @@ function calculateAdvancedPayment(orderId) {
                 }
 
                 var maxAmount = remaining;
-                alert("Tips ikke tillat for '" + GlobalPaymentMethods[code]['description'] + "'. Reduserer til " + remaining); 
+                alert("Tips ikke tillat for '" + GlobalPaymentMethods[code]['description'] + "'. Reduserer til " + remaining);
                 amount = maxAmount;
                 $(this).val(amount);
                 $(this).trigger('focusout');
             }
-            
+
             totalPaidNoGratuity += amount;
         } else {
             totalPaidGratuityAllowed += amount;
         }
-        
+
     });
 
-    $("#advancedPayment" + orderId + " input.payable").each( function() {
-        var amount = Number($(this).val());
-        if (!amount) {
-            return;
-        }
-        
-        if (amount < 0) {
-            amount = 0;
-            $(this).val(amount);
-            return;
-        }
+    var giftCardTotalValue = calculateGiftCardTotalValue(orderId);
+    if ( (giftCardTotalValue + totalPaidNoGratuity + totalPaidGratuityAllowed) >= orderTotal) {
+        Basket[orderId]['paidByGiftCard'] = 1;
+    } else {
+        $("#advancedPayment" + orderId + " input.payable").each( function() {
+            var amount = Number($(this).val());
+            if (!amount) {
+                return;
+            }
 
-        var code = $(this).prop('name');
-        if(Basket[orderId][code + 'gratuityAllowed'] == 'false') {
-            if ((amount + totalPaidNoGratuity) > orderTotal) {
-                var remaining = orderTotal - totalPaidNoGratuity;
-                if (remaining < 0) {
-                    remaining = 0;
+            if (amount < 0) {
+                amount = 0;
+                $(this).val(amount);
+                return;
+            }
+
+            var code = $(this).prop('name');
+            if(Basket[orderId][code + 'gratuityAllowed'] == 'false') {
+                if ((amount + totalPaidNoGratuity) > orderTotal) {
+                    var remaining = orderTotal - totalPaidNoGratuity;
+                    if (remaining < 0) {
+                        remaining = 0;
+                    }
+
+                    var maxAmount = remaining;
+                    alert("Tips ikke tillat for betalingsmetode '" + GlobalPaymentMethods[code]['description'] + "'. Reduserer til " + remaining);
+                    amount = maxAmount;
+                    $(this).val(amount);
+                    $(this).trigger('focusout');
                 }
 
-                var maxAmount = remaining;
-                alert("Tips ikke tillat for betalingsmetode '" + GlobalPaymentMethods[code]['description'] + "'. Reduserer til " + remaining); 
-                amount = maxAmount;
-                $(this).val(amount);
-                $(this).trigger('focusout');
+                totalPaidNoGratuity += amount;
+            } else {
+                totalPaidGratuityAllowed += amount;
             }
-            
-            totalPaidNoGratuity += amount;
-        } else {
-            totalPaidGratuityAllowed += amount;
-        }
-    });
-    
-    var totalPaid = totalPaidNoGratuity + totalPaidGratuityAllowed;
-    
-    var diff = orderTotal - totalPaid;
-    var tips = 0;
-    var remaining = 0;
-    var color = "color: black";
-    if (diff > 0) {
-        remaining = diff;
-        color = "color: red";
-    } else if (diff < 0) {
-        tips = -diff;
+        });
     }
-    
-    $("#advancedPaymentRemaining" + orderId).html("Gjenst&aring;ende &aring; betale <em style='" + color + "'>" + remaining + "</em>");
-    $("#advancedPaymentTip" + orderId).html("Tips <em style='color: black;'>" + tips + "</em>");
+
+    var totalPaid = totalPaidNoGratuity + totalPaidGratuityAllowed + giftCardTotalValue;
+    if (Basket[orderId]['paidByGiftCard']) {
+        if (totalPaid > orderTotal) {
+            $("#advancedPaymentRemaining" + orderId).html("<span style='color: green;'>Restbel&oslash;p (nytt gavekort)</span><em style='color: green;'>" + (totalPaid - orderTotal)+ "</em>");
+            $("#completeAdvancedPayment" + orderId).hide();
+            $("#newGiftCard" + orderId).show();
+            $("#advancedPayment" + orderId + " ul li input.payable").each( function() {
+                $(this).attr('disabled', 'disabled');
+                $(this).attr('value', '0');
+            });
+        } else {
+            $("#advancedPaymentRemaining" + orderId).html("Gjenst&aring;ende &aring; betale <em style='color: green;'>0</em>");
+            $("#newGiftCard" + orderId).hide();
+            $("#completeAdvancedPayment" + orderId).show();
+        }
+
+        $("#advancedPaymentTip" + orderId).hide();
+    } else {
+        $("#advancedPaymentTip" + orderId).show();
+        $("#completeAdvancedPayment" + orderId).show();
+        $("#newGiftCard" + orderId).hide();
+        $("#advancedPayment" + orderId + " ul li input.payable").each( function() {
+            $(this).removeAttr('disabled');
+        });
+
+        var diff = orderTotal - totalPaid;
+        var tips = 0;
+        var remaining = 0;
+        var color = "color: black";
+        if (diff > 0) {
+            remaining = diff;
+            color = "color: red";
+        } else if (diff < 0) {
+            tips = -diff;
+        }
+
+        $("#advancedPaymentRemaining" + orderId).html("Gjenst&aring;ende &aring; betale <em style='" + color + "'>" + remaining + "</em>");
+        $("#advancedPaymentTip" + orderId).html("Tips <em style='color: black;'>" + tips + "</em>");
+    }
+}
+
+function emailChanged(orderId, newEmail) {
+    Basket[orderId]['emailAddress'] = newEmail;
 }
 
 function deliveryLateClick(orderId) {
@@ -1479,7 +1564,7 @@ function deliveryLateClick(orderId) {
         $("#discountPayment" + orderId + " strong").css('text-decoration', 'line-through');
         $("#discountPayment" + orderId + " strong").css('color', '#999');
         $("#discountDetails" + orderId).hide();
-        
+
         if(!Giftcards[orderId]) {
             $("#subTotalDetails" + orderId).hide();
         }
@@ -1508,7 +1593,7 @@ function addGiftCardClick(orderId) {
     $("#payment").hide();
     $("#addGiftCard").show();
     $("#addGiftCard" + orderId).show();
-    
+
 }
 
 function completeAddGiftCard(orderId) {
@@ -1516,8 +1601,8 @@ function completeAddGiftCard(orderId) {
     var authEgcUrl = peppesEGCUrl + "?giftcardId=" + giftCardId + "&orderNo=" + orderId;
     if(desktopMode && localStorage['userID'] == '12345') {
         authEgcUrl = localGiftCardUrl;
-    } 
-    
+    }
+
     $.ajax({
         type: "GET",
         url: authEgcUrl,
@@ -1535,43 +1620,42 @@ function completeAddGiftCard(orderId) {
 function processGiftCardReply(orderId, xml) {
     var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
     var giftCard = $(xml).find("giftcard");
-    
+
     if(!giftCard) {
         alert(xmlstr);
         return;
     }
-    
+
     var amount = $(giftCard).attr("amount");
     if (amount % 1 == 0) {
         amount = Number(amount);
     }
-    
-    var giftCardId = $(giftCard).attr("id"); 
+
+    var giftCardId = $(giftCard).attr("id");
     if (!giftCardId || !amount) {
         alert(xmlstr);
         return;
     }
-    
-    if (!Giftcards[orderId]) {
-        Giftcards[orderId] = new Array();
-    }
-    
-    $("#egcDetailsList" + orderId + " ul")
-    .append("<li id='detailsGiftCardItem" + giftCardId + "' class='giftCard enabled' >Gavekort - " + giftCardId + "<strong> -" + amount + " kr</strong></li>");
 
-    var giftCardListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + amount + " kr</strong></div></li>";    
-    if (desktopMode) {
-        giftCardListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "' onclick='giftCardClick(" + giftCardId + ","+ orderId + ")'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + amount + " kr</strong></div></li>"
+    if (!Giftcards[orderId]) {
+        Giftcards[orderId] = [];
     }
-    
-    $("#egcPaymentList" + orderId + " ul")
-    .append(giftCardListItem);
+
+    $("#egcDetailsList" + orderId + " ul")
+        .append("<li id='detailsGiftCardItem" + giftCardId + "' class='giftCard enabled' >Gavekort - " + giftCardId + "<strong> -" + amount + " kr</strong></li>");
+
+    var giftCardListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + amount + " kr</strong></div></li>";
+    if (desktopMode) {
+        giftCardListItem = "<li id='paymentGiftCardItem" + giftCardId + "' class='giftCard enabled' title='" + giftCardId + ";" + orderId + "' onclick='giftCardClick(" + giftCardId + ","+ orderId + ")'><div class='tap'>Gavekort - " + giftCardId + "<strong> -" + amount + " kr</strong></div></li>";
+    }
+
+    $("#egcPaymentList" + orderId + " ul").append(giftCardListItem);
     addTouchListener('paymentGiftCardItem' + giftCardId, onGiftCardTouchEnd);
 
-    $("#egcStart" + orderId).after("<li><div class='egc enabled' id='advancedPaymentGiftCardItem" + giftCardId + "'>EGK-" + giftCardId + " <input class='subtractable egc' type='number' disabled='disabled' value='" + amount + "'/></div></li>");
+    $("#egcStart" + orderId).after("<li><div class='egc enabled' id='advancedPaymentGiftCardItem" + giftCardId + "'>EGK-" + giftCardId + " <input class='egc' type='number' disabled='disabled' value='" + amount + "'/></div></li>");
 
     var size = Giftcards[orderId].length;
-    Giftcards[orderId][size] = new Array();
+    Giftcards[orderId][size] = [];
     Giftcards[orderId][size]['id'] = giftCardId;
     Giftcards[orderId][size]['value'] = amount;
     Giftcards[orderId][size]['status'] = 1;
@@ -1594,13 +1678,11 @@ function giftCardClick(giftCardId, orderId) {
     if($("#paymentGiftCardItem" + giftCardId).hasClass("enabled")) {
         $("#paymentGiftCardItem" + giftCardId).removeClass("enabled");
         $("#detailsGiftCardItem" + giftCardId).removeClass("enabled");
-        $("#advancedPaymentGiftCardItem" + giftCardId + " input").removeClass("subtractable");
         $("#advancedPaymentGiftCardItem" + giftCardId).removeClass("enabled");
         setGiftCardStatus(giftCardId, orderId, 0);
     } else {
         $("#paymentGiftCardItem" + giftCardId).addClass("enabled");
         $("#detailsGiftCardItem" + giftCardId).addClass("enabled");
-        $("#advancedPaymentGiftCardItem" + giftCardId + " input").addClass("subtractable");
         $("#advancedPaymentGiftCardItem" + giftCardId).addClass("enabled");
         setGiftCardStatus(giftCardId, orderId, 1);
     }
@@ -1621,7 +1703,7 @@ function calculateOrder(orderId) {
     //Reset basket properties
     Basket[orderId]['paidByGiftCard'] = 0;
     Basket[orderId]['issueGiftCard'] = 0;
-    
+
     var grandTotals = Basket[orderId]['baseOrderTotal'];
     if (Basket[orderId]['lateDelivery'] == 1) {
         grandTotals = Basket[orderId]['baseOrderTotalRebate'];
@@ -1649,7 +1731,6 @@ function calculateOrder(orderId) {
         $("#cardButton" + orderId).hide();
         $("#giftCardButton" + orderId).hide();
         $("#cashButton" + orderId).hide();
-        $("#calculator").hide();
         $("#completeButton" + orderId).show();
     } else {
         $("#completeButton" + orderId).hide();
@@ -1684,17 +1765,17 @@ function addTouchListener(elementId, onTouchEndFunc) {
         alert('AddTouchListener: elementId is null!');
         return;
     }
-    
-    var touchable = document.getElementById(elementId)
+
+    var touchable = document.getElementById(elementId);
     if (!touchable) {
         alert('AddTouchListener: ' + elementId + ' is null!');
         return;
     }
-    
+
     touchable.addEventListener("touchstart", onTouchStart);
     touchable.addEventListener("touchmove", onTouchMove);
     var fn = onTouchEndFunc;
-    
+
     touchable.addEventListener("touchend", function(e) {
         if (tapDetected(e) && !ignoreClick) {
             fn(e);
@@ -1718,18 +1799,69 @@ function verifyCellPhoneNumber(orderId) {
     $("#payment").hide();
     $("#payment #totals #paymentDetails" + orderId).hide();
     $("#payment #paymentButtons #paymentSelection" + orderId).hide();
-
     $("#verifyCellPhone").show();
     $("#verifyCellPhone" + orderId).show();
+}
+
+function verifyCellPhoneNumberAdvancedPayment(orderId) {
+    var paymentError = false;
+    $("#advancedPayment" + orderId + " input.subtractable").each( function() {
+        var amount = Number($(this).val());
+        if(amount <= 0) {
+            return;
+        }
+
+        var code = $(this).prop('name');
+        if (GlobalPaymentMethods[code]['discountCodeRequired'] == 'true') {
+            var $discount = $("#" + code + "-" + orderId + "-discount span");
+            var discountCode = $discount.attr('name');
+            if (!discountCode) {
+                alert('Rabattkode mangler for ' + GlobalPaymentMethods[code]['description']);
+                paymentError = true;
+                return;
+            }
+        }
+
+        if(GlobalPaymentMethods[code]['complaintCodeRequired'] == 'true') {
+            var $complaint = $("#" + code + "-" + orderId + "-complaint span");
+            var complaintCode = $complaint.attr('name');
+            if (!complaintCode) {
+                alert('Reklamasjonskode mangler for ' + GlobalPaymentMethods[code]['description']);
+                paymentError = true;
+                return;
+            }
+
+            if(!Basket[orderId]['complaintOrderLineList']) {
+                alert('Reklamasjon ufullstendig - mangler ordrelinjer');
+                paymentError = true;
+                return;
+            }
+        }
+    });
+
+    if (paymentError) {
+        return;
+    }
+
+    screenLevel = 13;
+    $("#advancedPayment" + orderId).hide();
+    $("#reset").hide();
+    $("#calculator").hide();
+    showVerifyCellPhone();
 }
 
 function completeCellPhone(orderId) {
     var cellPhoneNumber = $("#cellPhoneNumber" + orderId).val();
     if (cellPhoneNumber && (cellPhoneNumber.length > 7 && cellPhoneNumber.length < 12)) {
-        $("#verifyCellPhone" + orderId).hide();
-        $("#verifyCellPhone").hide();
+        hideVerifyCellPhone();
         Basket[orderId]['cellPhoneNumber'] = cellPhoneNumber;
-        completePayment(orderId, -1);
+        if (screenLevel == 13) {
+            //advanced payment
+            completeAdvancedPayment(orderId);
+        } else {
+            completePayment(orderId, -1);
+        }
+
         Log(activities['NewGiftCardIssued']);
     } else {
         alert('Telefonnummeret ' + cellPhoneNumber + ' er ikke gyldig.');
@@ -1737,13 +1869,7 @@ function completeCellPhone(orderId) {
 }
 
 function cancelCellPhone(orderId) {
-    screenLevel = 4;
-    $("#verifyCellPhone" + orderId).hide();
-    $("#verifyCellPhone").hide();
-
-    $("#payment").show();
-    $("#payment #totals #paymentDetails" + orderId).show();
-    $("#payment #paymentButtons #paymentSelection" + orderId).show();
+    onBackKeyDown();
 }
 
 function completePayment(orderId, paymentType) {
@@ -1753,6 +1879,11 @@ function completePayment(orderId, paymentType) {
     if (Basket[orderId]['lateDelivery'] == 1) {
         orderTotal = Basket[orderId]['baseOrderTotalRebate'];
         urlParams += "&lateDelivery=true";
+    }
+
+    var emailAddress = Basket[orderId]['emailAddress'];
+    if (emailAddress && emailAddress.trim()) {
+        urlParams += "&receiptEmail=" + emailAddress.trim();
     }
 
     if(Giftcards[orderId]) {
@@ -1770,23 +1901,23 @@ function completePayment(orderId, paymentType) {
             urlParams += "&cellPhoneNumber=" + Basket[orderId]['cellPhoneNumber'];
         }
     }
-    
+
     if(!Basket[orderId]['paidByGiftCard']) {
         Basket[orderId]['totalPaid'] = orderTotal;
         if(paymentType == 0) {
             var decimals = orderTotal % 1;
             if (decimals >= 0.5) {
                 orderTotal += (1 - decimals);
-                alert("Totalsum er rundet opp til " + orderTotal); 
+                alert("Totalsum er rundet opp til " + orderTotal);
             } else {
                 orderTotal -= decimals;
                 alert("Totalsum er rundet ned til " + orderTotal);
             }
             urlParams += "&paymentMethod=" + paymentMethodCash;
             urlParams += "&paymentAmount=" + orderTotal;
-            
+
         }
-    
+
         if (paymentType == 1) {
             urlParams += "&paymentMethod=" + paymentMethodCard;
             urlParams += "&paymentAmount=" + orderTotal;
@@ -1795,7 +1926,7 @@ function completePayment(orderId, paymentType) {
         Log(activities['OrderPaidByGiftCard']);
         Basket[orderId]['totalPaid'] = 0;
     }
-    
+
     completeDelivery(orderId, urlParams);
 }
 
@@ -1803,20 +1934,27 @@ function completeAdvancedPayment(orderId) {
     if (ignoreClick) {
         return;
     }
-    
+
     if (!orderId) {
         orderId = lastOrderId;
     }
-    
+
     var urlParams = "";
     var orderTotal = Number(Basket[orderId]['baseOrderTotal']);
     if (Basket[orderId]['lateDelivery'] == 1) {
         orderTotal = Number(Basket[orderId]['baseOrderTotalRebate']);
         urlParams += "&lateDelivery=true";
     }
-    
+
+    var emailAddress = Basket[orderId]['emailAddress'];
+    if (emailAddress && emailAddress.trim()) {
+        urlParams += "&receiptEmail=" + emailAddress.trim();
+    }
+
+    var totalPaid = 0;
     if(Giftcards[orderId]) {
         var orderHasGiftCard = false;
+        var giftCardNumbers = "";
         for (var i = 0; i < Giftcards[orderId].length; i++) {
             if (Giftcards[orderId][i]['status'] == 1) {
                 orderTotal -= Giftcards[orderId][i]['value'];
@@ -1830,19 +1968,17 @@ function completeAdvancedPayment(orderId) {
         }
     }
 
-
-    var totalPaid = 0;
     var paymentError = false;
     $("#advancedPayment" + orderId + " input.subtractable").each( function() {
         var amount = Number($(this).val());
         if(amount <= 0) {
             return;
         }
-        
+
         totalPaid += amount;
         var code = $(this).prop('name');
         urlParams += "&paymentMethod=" + code + "&paymentAmount=" + amount;
-        
+
         if (GlobalPaymentMethods[code]['discountCodeRequired'] == 'true') {
             var $discount = $("#" + code + "-" + orderId + "-discount span");
             var discountCode = $discount.attr('name');
@@ -1851,7 +1987,7 @@ function completeAdvancedPayment(orderId) {
                 paymentError = true;
                 return;
             }
-            
+
             urlParams += "&discountCode=" + discountCode;
         }
 
@@ -1869,41 +2005,42 @@ function completeAdvancedPayment(orderId) {
                 paymentError = true;
                 return;
             }
-            
+
             urlParams += "&complaintCode=" + complaintCode + "&" + Basket[orderId]['complaintOrderLineList'];
         }
-        
-        totalPaid =+ amount;
     });
-    
-    $("#advancedPayment" + orderId + " input.payable").each( function() {
-        if(paymentError) {
-            return;
-        }
-        
-        var amount = Number($(this).val());
-        if(amount <= 0) {
-            return;
-        }
-        
-        totalPaid += amount;
-        var code = $(this).prop('name');
-        urlParams += "&paymentMethod=" + code + "&paymentAmount=" + amount;
-    });
-    
+
+    if(!Basket[orderId]['paidByGiftCard']) {
+        $("#advancedPayment" + orderId + " input.payable").each( function() {
+            if(paymentError) {
+                return;
+            }
+
+            var amount = Number($(this).val());
+            if(amount <= 0) {
+                return;
+            }
+
+            totalPaid += amount;
+            var code = $(this).prop('name');
+            urlParams += "&paymentMethod=" + code + "&paymentAmount=" + amount;
+        });
+    } else {
+        orderTotal = totalPaid;
+    }
+
     if (paymentError) {
         return;
     }
-    
+
     var diff = orderTotal - totalPaid;
     if (diff > 0) {
         alert('Manko ' + diff + ' kr. Kan ikke levere ordre.');
-        return; 
+        return;
     }
-    
+
     Basket[orderId]['totalPaid'] = totalPaid;
     Basket[orderId]['gratuity'] = Number(-diff);
-    alert(urlParams);
     completeDelivery(orderId, urlParams);
 }
 
@@ -1918,7 +2055,7 @@ function completeDelivery(orderId, urlParams, tip) {
     if (Basket[orderId]['sign']) {
         var params = deliveryUrl.slice(deliveryUrl.indexOf("?") + 1, deliveryUrl.length);
         params += "&sign=" + Basket[orderId]['sign'];
-        
+
         $.ajax({
             type: "POST",
             url: peppesDeliveryOrderUrl,
@@ -1932,7 +2069,7 @@ function completeDelivery(orderId, urlParams, tip) {
                     Log(activities['OrderDelivered']);
                 }
             },
-            
+
             error: function(e) {
                 alert("Kunne ikke levere pizza.");
             }
@@ -1955,9 +2092,9 @@ function completeDelivery(orderId, urlParams, tip) {
             }
         });
     }
-    
+
     var deliveredHTML = $("#listItem"+orderId).html();
-    $("#listItem"+orderId).remove(); 
+    $("#listItem"+orderId).remove();
     $("#destinationList .delivered").append("<div class='destinationListItem listitem' onClick='viewCustomer(" + orderId + ")' id='listItem" + orderId + "'></div>");
     $("#destinationList .delivered #listItem"+orderId).append(deliveredHTML);
 
@@ -1973,13 +2110,13 @@ function completeDelivery(orderId, urlParams, tip) {
     $("#detailsList" + orderId + " .button").hide();
     $("#detailsItem" + orderId + " .button").hide();
     $("#payButton" + orderId + " .button").hide();
-    
+
     $("#grandTotalsDetails" + orderId).html("Betalt <strong>" + Number(Basket[orderId]['totalPaid']) + "</strong>");
     if (Basket[orderId]['gratuity'] > 0) {
         $("#grandTotalsDetailsList" + orderId + " ul").append("<li style='color: green'>Herav tips <strong> " + Number(Basket[orderId]['gratuity']) + "</strong></li>");
     }
-     
-    if (screenLevel == 8) {
+
+    if (screenLevel == 8 || screenLevel == 13) {
         //Hide advanced payment
         hideAdvancedPayment();
     }
@@ -1989,7 +2126,7 @@ function completeDelivery(orderId, urlParams, tip) {
 
 var deliveryReturn = function(orderID) {
     currentOID = orderID;
-    function onConfirm(button) {
+    var onConfirm = function(button) {
         if(button==1) {
             deliveryURL = peppesDeliveryOrderUrl + "?employeeId="+localStorage['userID']+"&delivered=true&postponeSettlement=true&orderNo="+currentOID;
             $.ajax({
@@ -2020,7 +2157,7 @@ var deliveryReturn = function(orderID) {
 
             backToList();
         }
-    }
+    };
 
     if (desktopMode) {
         onConfirm(1);
@@ -2058,7 +2195,7 @@ function backToList(){
     $("#destinationItemList").hide();
     $(".destinationsDetailsItem").hide();
     $(".destinationsDetailsList").hide();
-        
+
     $('#tab1').addClass('selected');
     $("#destinationsListHeader").show();
     $("#destinationsList").show();
@@ -2069,7 +2206,7 @@ function backToList(){
 }
 
 function arriveAtCustomer() {
-    showDestinationItemList(); 
+    showDestinationItemList();
 }
 
 function onCalculatorClick() {
@@ -2098,22 +2235,22 @@ function onLateDeliveryCheckboxClicked(e) {
 
 function onPadLockClick() {
     if (screenLocked) {
-        $("#padlock img").attr('src', 'img/padlock-open.png');
         screenLocked = false;
+        $("#padlock img").attr('src', 'img/padlock-open.png');
     } else {
-        $("#padlock img").attr('src', 'img/padlock-closed.png');
         screenLocked = true;
+        $("#padlock img").attr('src', 'img/padlock-closed.png');
     }
 }
 
 function initTimer() {
     timer();
-    window.setInterval("timer()", 1000);
+    window.setInterval(timer, 1000);
 }
 
 function timer() {
     $('.timestamp').each(function(index) {
-        $(this).html(timeAgo($(this).attr('title'))); 
+        $(this).html(timeAgo($(this).attr('title')));
     });
 }
 
@@ -2125,7 +2262,7 @@ function GetUnixTime() {
 function timeAgo(timestamp) {
     since = ((timestamp)- GetUnixTime()) / (60 * 60 * 24);
     since = Math.ceil(-since);
-    
+
     if (since >= 50) {
         return "<span style='color: red;'>" + since + " min </span>";
     }
@@ -2152,13 +2289,13 @@ function disableAllLinks(){
 }
 
 function checkForConnectionTimer() {
-    window.setInterval("checkForConnection()", 10000);
+    window.setInterval(checkForConnection, 10000);
 }
 
 function localstorageLoad() {
     resetApp(true);
     $("#loginDiv").hide();
-    $("#welcome").hide(); 
+    $("#welcome").hide();
     $("#loader").show();
     xml = localStorage['xml'];
     parseXML(xml);
@@ -2170,19 +2307,20 @@ function resetApp(supressConnectionCheck) {
     $("#loginDiv").show();
     $("#welcome").show();
     clearCanvas();
-    
+
     //reset all globals
-    Basket = new Array();
-    Giftcards = new Array();
-    DiscountCodes = new Array();
-    ComplaintCodes = new Array();
-    PaymentMethods = new Array();
-    GlobalPaymentMethods = new Array();
+    Basket = [];
+    Giftcards = [];
+    DiscountCodes = [];
+    ComplaintCodes = [];
+    PaymentMethods = [];
+    GlobalPaymentMethods = [];
     lastOrderId = 0;
     lastPaymentCode = '';
     screenLevel = 0;
     ignoreClick = false;
     screenLocked = false;
+    $("#padlock img").attr('src', 'img/padlock-open.png');
     isTouching = false;
 }
 
@@ -2194,7 +2332,7 @@ function hideAll() {
     $("#products").hide();
     $("#calculator").hide();
     $("#destinationsList").hide();
-    $("#destinationsListHeader").hide();  
+    $("#destinationsListHeader").hide();
     $("#destinationsDetailsHeader").hide();
     $("#advancedPaymentHeader").hide();
     $("#productHeader").hide();
@@ -2222,22 +2360,22 @@ function clearCanvas() {
 }
 
 function signSave(orderId) {
-    $("#saveSignInfo").show();    
+    $("#saveSignInfo").show();
     saveImageData(orderId);
 }
 
 function saveImageData(orderId) {
     var currentOrderId = orderId;
-    
+
     if (desktopMode) {
         Basket[orderId]['sign'] = 1;
         continueAfterSign(orderId);
         return;
     }
-    
+
     var canvas = document.getElementById('imageView');
     window.plugins.canvas.toDataURL(canvas, "image/png", success, failure);
-    
+
     function success(arg) {
         if (arg.size > 0) {
             Basket[currentOrderId]['sign'] = arg.data;
@@ -2257,7 +2395,7 @@ function continueAfterSign(orderId) {
     screenLevel = 5;
     clearCanvas();
     $("#sign").hide();
-    $("#signButton"+orderId).hide(); 
+    $("#signButton"+orderId).hide();
     $("#showSignButton"+orderId).hide();
     $("#saveSignInfo").hide();
     $("#destinationsDetailsHeader").hide();
@@ -2281,12 +2419,12 @@ function testConnection() {
     } else {
         connected = checkForConnectionAtLoad();
     }
-    
+
     if(connected) {
         $("#offline").hide();
         $("#loginDiv").hide();
         $("#welcome").hide();
-        $("#productHeader").show(); 
+        $("#productHeader").show();
         $("#loader").show();
         userpin = localStorage['userID'];
         loadXML(userpin);
