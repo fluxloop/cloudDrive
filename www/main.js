@@ -2366,6 +2366,7 @@ function signSave(orderId) {
 }
 
 function saveImageData(orderId) {
+	alert(1);
     var currentOrderId = orderId;
 
     if (desktopMode) {
@@ -2375,8 +2376,9 @@ function saveImageData(orderId) {
     }
 
     var canvas = document.getElementById('imageView');
+    alert(2);
     window.plugins.canvas.toDataURL(canvas, "image/png", success, failure);
-
+	
     function success(arg) {
         if (arg.size > 0) {
             Basket[currentOrderId]['sign'] = arg.data;
