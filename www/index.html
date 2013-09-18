@@ -1,42 +1,139 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
     <head>
         <meta charset="utf-8" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320" />
+        
         <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" />
+
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <title>Goodbye World</title>
+        
+             <script type="text/javascript" src="phonegap.js"></script>
+        
+                 <script type="text/javascript" charset="utf-8" src="jquery.min.js"></script>
+                     <script type="text/javascript" charset="utf-8" src="canvas.js"></script>
+                       <script type="text/javascript" charset="utf-8" src="main.js"></script>
     </head>
-    <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+<body onload="init();">
+    <div class="header"></div>
+
+    <div id="header">
+        <div id="desktopBackButton" style="float: right; display: none;" onClick="onBackKeyDown()">Back</div>
+        <div id="desktopSwap" style="float: right; display: none;" onClick="onOfflineClick()">Swap</div>
+        
+        <div id="calculator" style="display: none;"><img src="img/calculator.png" alt="calc"/></div>
+        <div id="reset" style="display: none;"><img src="img/reset.png" alt="reset"/></div>
+        <div id="padlock" style="display: none;"><img src="img/padlock-open.png" alt="padlock"/></div>
+        
+        <h1 id="welcome">
+            <img onclick="resetApp();" src="img/logo-mini.png" alt="logo" style="float: left;" />
+            Velkommen
+        </h1>
+        
+        <h1 id="productHeader" style="display:none;"><img onclick="resetApp();" src=
+        "img/logo-mini.png" alt="logo" style="float: left;" />Produktliste</h1>
+
+        <h1 id="destinationsListHeader" style="display:none;"><img onclick="resetApp();" src=
+        "img/logo-mini.png" alt="logo" style="float: left;" />Destinasjoner</h1>
+
+        <h1 id="destinationsDetailsHeader" style="display:none;"><img onclick="resetApp();"
+        src="img/logo-mini.png" alt="logo" style="float: left;" />Detaljer</h1>
+        
+        <h1 id="paymentHeader" style="display:none;"><img onclick="resetApp();"
+        src="img/logo-mini.png" alt="logo" style="float: left;" />Betaling</h1>
+        
+        <h1 id="advancedPaymentHeader" style="display:none;"><img onclick="resetApp();"
+        src="img/logo-mini.png" alt="logo" style="float: left;" />Betaling - Avansert</h1>
+        
+        <h1 id="discountSelectionHeader" style="display:none;"><img onclick="resetApp();"
+        src="img/logo-mini.png" alt="logo" style="float: left;" />Rabatter</h1>
+        
+        <h1 id="complaintSelectionHeader" style="display:none;"><img onclick="resetApp();"
+        src="img/logo-mini.png" alt="logo" style="float: left;" />Reklamasjon</h1>
+
+    </div>
+
+    <div id="offline" onclick="testConnection();" style="display:none;">
+        Telefonen er uten dekning. Trykk her for &aring; pr&oslash;ve &aring; g&aring;
+        tilbake online.
+    </div>
+
+    <div id="newVersion" style="display:none;">
+        <a href="http://peppes:hamburger@fluxloop.com/peppes/driver/">Ny versjon finnes.
+        Klikk her for &aring; laste ned</a>
+    </div>
+
+    <img id="loader" src="img/peppes-intro.gif" style="display: none;" alt="intro"/>
+    <div id="wrapper">
+        <div id="loginDiv" style="">
+            <input id="pincode" type="number" name="pincode" />
+            <div class="button" onclick="doLogin();">
+                <div> Login </div> 
+            </div> 
+        </div>
+
+        <div id="products" style="display:none;">
+            <div class="list" id="productList"></div>
+            <div class="footer">
+                <div class="button disabled" id="productsDone">
+                    <div> Varer igjen <span id="products-total">1</span> </div> 
+                </div> 
+            </div> 
+        </div>
+
+        <div id="destinationsList" style="display:none;">
+            <div id="destinationList">
+                <div class="normal">
+                    <div class="listheader"> Bestillinger </div> 
+                </div>
+                <div style="display:none;" class="preorder">
+                    <div class="listheader"> Forh&aring;ndsbestillinger </div> 
+                </div>
+                <div style="display:none;" class="delivered">
+                    <div class="listheader"> Levert </div> 
+                </div> 
+            </div> 
+        </div>
+    
+        <div id="destinations" style="display:none;">
+            <div class="tabs">
+                <div class="tab selected" id="tab1" onclick="showDestinationInfo();"> Kunde </div>
+                <div class="tab" id="tab2" onclick="showDestinationItemList();"> Varer </div> 
+            </div>
+
+            <div id="destinationsDetails">
+                <div id="destinationInfo"></div>
+                <div id="destinationItemList" style="display: none;"></div>
             </div>
         </div>
-        <script type="text/javascript" src="phonegap.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+        <div id="payment">
+            <div id="totals"></div>
+            <div id="paymentButtons"></div>
+        </div>
+        <div id="addGiftCard" style="display: none"></div>
+        <div id="verifyCellPhone"></div>
+        <div id="advancedPayment"></div>
+        <div id="discountSelection" style="display: none"></div>
+        <div id="complaintSelection" style="display: none"></div>
+        <div id="complaintOrderLineSelection" style="display: none"></div>
+    </div>
+    
+    <div id="sign" style="display:none;">
+    <canvas id="imageView" width="320" height="340"></canvas>
+    <h3 id="saveSignInfo" style="display:none;">Lagrer..</h3>
+    <div id="signButtons">
+        <div class="button buttons2" onclick="clearCanvas();">
+            <div>
+                Pr&oslash;v igjen
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
 </html>
+
+

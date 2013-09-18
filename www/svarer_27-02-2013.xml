@@ -1,0 +1,219 @@
+<totalorder>
+<employee id="90993" name="Testbruker 3 Kasse">
+<orders>5</orders>
+<next>1361960352000</next>
+<info/>
+</employee>
+<discountCodes>
+<discountCode code="009" description="Stor til Liten pris 20%"/>
+<discountCode code="008" description="Rabatt til gode"/>
+<discountCode code="007" description="Studentrabatt"/>
+<discountCode code="006" description="Personalrabatt"/>
+<discountCode code="005" description="Storordre rabatt"/>
+<discountCode code="004" description="Peppes-kortet"/>
+<discountCode code="003" description="Rabattstige"/>
+<discountCode code="002" description="ICA Pizzakort"/>
+<discountCode code="001" description="Storkunderabatt"/>
+<discountCode code="018" description="Gule sider rabatt"/>
+</discountCodes>
+<complaintCodes>
+<complaintCode code="50" description="Lang ventetid T.O."/>
+<complaintCode code="99" description="Feil tlf.nr. kunden treffes"/>
+<complaintCode code="98" description="Feil hovedtelefonnr"/>
+<complaintCode code="97" description="Sendt feil dag"/>
+<complaintCode code="96" description="Sendt feil klokkeslett"/>
+<complaintCode code="95" description="Feil avdeling"/>
+<complaintCode code="94" description="Feil by/postnummer"/>
+<complaintCode code="93" description="Feil gateadresse"/>
+<complaintCode code="92" description="Skulle ha vært levering"/>
+<complaintCode code="30" description="Feil produkt-levert"/>
+<complaintCode code="103" description="Ordre ikke registrert"/>
+<complaintCode code="91" description="Skulle ha vært TO"/>
+<complaintCode code="102" description="Ikke inf.om bortfall av lev.g"/>
+<complaintCode code="101" description="Feil antall på ordre"/>
+<complaintCode code="100" description="Feil vare på ordre"/>
+<complaintCode code="45" description="Avbestilt vare, men laget"/>
+<complaintCode code="41" description="Kunden kunne ikke betale"/>
+<complaintCode code="10" description="Feil håndtering av sjåfør"/>
+<complaintCode code="40" description="Falsk bestilling"/>
+<complaintCode code="23" description="Kald mat,erstattes på ny ordre"/>
+<complaintCode code="22" description="Kald mat-Levert,ikke erstattet"/>
+<complaintCode code="21" description="Glemt produkt-levert senere"/>
+<complaintCode code="20" description="Glemt produkt-ikke levert/lag."/>
+</complaintCodes>
+<products picked="false">
+<group name="Dressinger">
+<item qty="1.0">Peppes rømmedressing</item>
+</group>
+<group name="Mineralvann">
+<item qty="2.0">Coca-Cola 1,5 liter</item>
+</group>
+<group name="Pizza">
+<item qty="1.0" serialno="2.0">12.Pig's Knuckle</item>
+<item qty="1.0" serialno="3.0">1.Peppes Marguerita</item>
+<item qty="1.0" serialno="4.0">30.Heavy Heaven</item>
+<item qty="1.0" serialno="5.0">1.Peppes Marguerita</item>
+<item qty="1.0" serialno="6.0">12.Pig's Knuckle</item>
+</group>
+</products>
+<orders>
+<order delivered="false" deliveryWithin="1361963912000" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="false" serialno="2" timestamp="1361960352000">
+<giftcards>
+<giftcard amount="100.0" id="101219178"/>
+</giftcards>
+<customer id="11190438">
+<firstname>TORMOD</firstname>
+<lastname>ØVERLIER</lastname>
+<streetname>FAGERLIVEGEN</streetname>
+<streetnumber>29</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2312</postcode>
+<city>OTTESTAD</city>
+<phone>62576787</phone>
+<info></info>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="MB" complaintCodeRequired="false" description="Bankterminal" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="K" complaintCodeRequired="false" description="Kontant" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="GA" complaintCodeRequired="false" description="Gavekort EGK" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="V" complaintCodeRequired="false" description="Verdikupong" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="S" complaintCodeRequired="false" description="Peppes-sjekken" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="R" complaintCodeRequired="true" description="Reklamasjon" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="RA" complaintCodeRequired="false" description="Oppgjørsrabatt" discountCodeRequired="true" gratuityAllowed="false"/>
+<paymentMethod code="SL" complaintCodeRequired="false" description="Sent levert 50%" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="G" complaintCodeRequired="false" description="Gavekort Gammel" discountCodeRequired="false" gratuityAllowed="false"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="222.0" qty="1.0">12.Pig's Knuckle</orderline>
+<orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+<order delivered="false" deliveryWithin="1361963973000" id="44825559" notify="false" orderDiscount="0.0" orderTotal="301.0" orderphone="62576787" payment="cash" preorder="false" serialno="3" timestamp="1361960384000">
+<customer id="11190438">
+<firstname>TORMOD</firstname>
+<lastname>ØVERLIER</lastname>
+<streetname>FAGERLIVEGEN</streetname>
+<streetnumber>29</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2312</postcode>
+<city>OTTESTAD</city>
+<phone>62576787</phone>
+<info></info>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="MB" complaintCodeRequired="false" description="Bankterminal" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="K" complaintCodeRequired="false" description="Kontant" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="GA" complaintCodeRequired="false" description="Gavekort EGK" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="V" complaintCodeRequired="false" description="Verdikupong" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="S" complaintCodeRequired="false" description="Peppes-sjekken" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="R" complaintCodeRequired="true" description="Reklamasjon" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="RA" complaintCodeRequired="false" description="Oppgjørsrabatt" discountCodeRequired="true" gratuityAllowed="false"/>
+<paymentMethod code="SL" complaintCodeRequired="false" description="Sent levert 50%" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="G" complaintCodeRequired="false" description="Gavekort Gammel" discountCodeRequired="false" gratuityAllowed="false"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="166.0" qty="1.0">1.Peppes Marguerita</orderline>
+<orderline number="2" price="21.0" qty="1.0">Peppes rømmedressing</orderline>
+<orderline number="3" price="39.0" qty="1.0">Coca-Cola 1,5 liter</orderline>
+<orderline number="4" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+<order delivered="false" deliveryWithin="1361963999000" id="44825564" notify="false" orderDiscount="0.0" orderTotal="368.0" orderphone="62576787" payment="cash" preorder="false" serialno="4" timestamp="1361960409000">
+<customer id="11190438">
+<firstname>TORMOD</firstname>
+<lastname>ØVERLIER</lastname>
+<streetname>FAGERLIVEGEN</streetname>
+<streetnumber>29</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2312</postcode>
+<city>OTTESTAD</city>
+<phone>62576787</phone>
+<info></info>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="MB" complaintCodeRequired="false" description="Bankterminal" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="K" complaintCodeRequired="false" description="Kontant" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="GA" complaintCodeRequired="false" description="Gavekort EGK" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="V" complaintCodeRequired="false" description="Verdikupong" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="S" complaintCodeRequired="false" description="Peppes-sjekken" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="R" complaintCodeRequired="true" description="Reklamasjon" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="RA" complaintCodeRequired="false" description="Oppgjørsrabatt" discountCodeRequired="true" gratuityAllowed="false"/>
+<paymentMethod code="SL" complaintCodeRequired="false" description="Sent levert 50%" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="G" complaintCodeRequired="false" description="Gavekort Gammel" discountCodeRequired="false" gratuityAllowed="false"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="254.0" qty="1.0">30.Heavy Heaven</orderline>
+<orderline number="2" price="39.0" qty="1.0">Coca-Cola 1,5 liter</orderline>
+<orderline number="3" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+<order delivered="false" deliveryWithin="1361964024000" id="44825565" notify="false" orderDiscount="17.0" orderTotal="224.0" orderphone="41617757" payment="credit" preorder="false" serialno="5" timestamp="1361960434000">
+<customer id="10187070">
+<firstname/>
+<lastname>COMPUTANSE AS</lastname>
+<streetname>SANDMOVEGEN</streetname>
+<streetnumber>8</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2408</postcode>
+<city>ELVERUM</city>
+<phone>67124464</phone>
+<info></info>
+<contact>Tormod ØVERLIER</contact>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="F" complaintCodeRequired="false" description="Faktura/Konto" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="MB" complaintCodeRequired="false" description="Bankterminal" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="K" complaintCodeRequired="false" description="Kontant" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="V" complaintCodeRequired="false" description="Verdikupong" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="S" complaintCodeRequired="false" description="Peppes-sjekken" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="R" complaintCodeRequired="true" description="Reklamasjon" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="RA" complaintCodeRequired="false" description="Oppgjørsrabatt" discountCodeRequired="true" gratuityAllowed="false"/>
+<paymentMethod code="SL" complaintCodeRequired="false" description="Sent levert 50%" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="G" complaintCodeRequired="false" description="Gavekort Gammel" discountCodeRequired="false" gratuityAllowed="false"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="149.0" qty="1.0">1.Peppes Marguerita</orderline>
+<orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+<order delivered="false" deliveryWithin="1361964042000" id="44825566" notify="false" orderDiscount="67.0" orderTotal="230.0" orderphone="41617757" payment="credit" preorder="false" serialno="6" timestamp="1361960453000">
+<customer id="10187070">
+<firstname/>
+<lastname>COMPUTANSE AS</lastname>
+<streetname>SANDMOVEGEN</streetname>
+<streetnumber>8</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2408</postcode>
+<city>ELVERUM</city>
+<phone>67124464</phone>
+<info></info>
+<contact>Tormod ØVERLIER</contact>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="F" complaintCodeRequired="false" description="Faktura/Konto" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="MB" complaintCodeRequired="false" description="Bankterminal" discountCodeRequired="false" gratuityAllowed="true"/>
+<paymentMethod code="K" complaintCodeRequired="false" description="Kontant" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="V" complaintCodeRequired="false" description="Verdikupong" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="S" complaintCodeRequired="false" description="Peppes-sjekken" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="R" complaintCodeRequired="true" description="Reklamasjon" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="RA" complaintCodeRequired="false" description="Oppgjørsrabatt" discountCodeRequired="true" gratuityAllowed="false"/>
+<paymentMethod code="SL" complaintCodeRequired="false" description="Sent levert 50%" discountCodeRequired="false" gratuityAllowed="false"/>
+<paymentMethod code="G" complaintCodeRequired="false" description="Gavekort Gammel" discountCodeRequired="false" gratuityAllowed="false"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="155.0" qty="1.0">12.Pig's Knuckle</orderline>
+<orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+</orders>
+</totalorder>

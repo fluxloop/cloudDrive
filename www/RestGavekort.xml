@@ -1,0 +1,68 @@
+<totalorder>
+<employee id="90993" name="Testbruker 3 Kasse">
+<orders>2</orders>
+<next>1360065407000</next>
+<info/>
+</employee>
+<products picked="false">
+<group name="Dressinger">
+<item qty="4.0">Peppes rømmedressing</item>
+</group>
+</products>
+<orders>
+<order delivered="false" deliveryWithin="1361175688000" id="44655201" notify="false" orderTotal="97.0" orderphone="62576787" payment="cash" preorder="false" serialno="6" timestamp="1361175698000">
+<giftcards>
+<giftcard amount="50.0" id="101216307"/>
+</giftcards>
+<customer id="11190438">
+<firstname>TORMOD</firstname>
+<lastname>ØVERLIER</lastname>
+<streetname>FAGERLIVEGEN</streetname>
+<streetnumber>29</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2312</postcode>
+<city>OTTESTAD</city>
+<phone>62576787</phone>
+<info></info>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="K" description="Kontant"/>
+<paymentMethod code="GA" description="Gavekort EGK"/>
+<paymentMethod code="MB" description="Bankterminal"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="22.0" qty="1.0">Peppes rømmedressing</orderline>
+<orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+<order delivered="false" deliveryWithin="1361175688000" id="44655202" notify="false" orderTotal="96.0" orderphone="46804521" payment="cash" preorder="false" serialno="2" timestamp="1361175681000">
+<giftcards>
+<giftcard amount="1000.0" id="151216307"/>
+</giftcards>
+<customer id="11190438">
+<firstname>TORMOD</firstname>
+<lastname>ØVERLIER</lastname>
+<streetname>FAGERLIVEGEN</streetname>
+<streetnumber>29</streetnumber>
+<streetletter/>
+<floor/>
+<postcode>2312</postcode>
+<city>OTTESTAD</city>
+<phone>62576787</phone>
+<info></info>
+<email>tormod@computanse.no</email>
+</customer>
+<paymentMethods>
+<paymentMethod code="K" description="Kontant"/>
+<paymentMethod code="GA" description="Gavekort EGK"/>
+<paymentMethod code="MB" description="Bankterminal"/>
+</paymentMethods>
+<items>
+<orderline number="1" price="21.0" qty="1.0">Peppes rømmedressing</orderline>
+<orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
+</items>
+</order>
+</orders>
+</totalorder>
