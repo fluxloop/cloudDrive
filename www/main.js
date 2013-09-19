@@ -2357,15 +2357,7 @@ function sign(orderId) {
 
 function clearCanvas() {
 
-	if(debugmode==true){
-	var canvas = document.getElementById('imageView');
-	var context = canvas.getContext('2d');
-	context.beginPath();
-	context.moveTo(100, 150);
-	context.lineTo(320, 50);
-	context.stroke();
-	$("#debug").text(canvas.toDataURL().substr(22));
-	}
+
 
     canvas = document.getElementById('imageView');
     context = canvas.getContext('2d');
@@ -2394,6 +2386,8 @@ function saveImageData(orderId) {
 
     var canvas = document.getElementById('imageView');
 	var signdata = canvas.toDataURL().substr(22);
+	
+	$("#debug").text(signdata);
 	
         if (signdata.length > 128) {
             Basket[currentOrderId]['sign'] = signdata;
@@ -2445,4 +2439,21 @@ function testConnection() {
         userpin = localStorage['userID'];
         loadXML(userpin);
     }
+}
+
+/* Debug output in app*/
+
+if(debugmode==true){
+
+
+function debug() {
+var canvas = document.getElementById('imageView');
+var context = canvas.getContext('2d');
+context.beginPath();
+context.moveTo(100, 150);
+context.lineTo(320, 50);
+context.stroke();
+$("#debug").text(canvas.toDataURL().substr(22));
+}
+
 }
