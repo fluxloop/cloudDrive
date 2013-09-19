@@ -800,11 +800,18 @@ function parseXML(xml) {
         var customerPhone = $(this).find("phone").text();
         var customerInfo = $(this).find("info").text();
         var customerEmail = $(this).find("email").text();
-        
+        var emailList = "<select>";
+  
          $(this).find("email").each(function() {
+        
          customerEmail = $(this).text();
+         emailList += '<option value="'+customerEmail+'">'+customerEmail+'</option>';
+         
          });
-
+	
+		emailList += "<select>";
+		
+		
         Basket[orderId]['emailAddress'] = customerEmail;
 
         $("#destinationsDetails #destinationInfo #detailsItem"+orderId)
@@ -969,7 +976,7 @@ function parseXML(xml) {
             $("#signButtons")
                 .append('<div class="button buttons2" id="signButton'+orderId+'" style="display:none" onClick="signSave(' + orderId + ')"><div>Lagre</div></div>');
 
-            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div><input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
+            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
             var deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
             if (desktopMode) {
@@ -1035,7 +1042,7 @@ function parseXML(xml) {
                 .append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
                 .append("<div class='button buttons2 delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
 
-            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div><input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
+            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
             var deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
             if (desktopMode) {
