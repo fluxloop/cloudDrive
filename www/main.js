@@ -41,6 +41,7 @@ var peppesDeliveryOrderUrl = peppesApiUrl + "/DeliverDriverOrder";
 var desktopModePossible = true;
 var desktopMode = false;
 var offlineMode = false;
+var debugmode = false;
 
 //Activities
 var activities = [];
@@ -129,6 +130,9 @@ function onDeviceReady(){
         $("#calculator").click(onCalculatorClick);
         $("#reset").click(onResetClick);
         $("#padlock").click(onPadLockClick);
+        
+       
+        
     }
 }
 
@@ -804,8 +808,8 @@ function parseXML(xml) {
             .append("<ul class='icon'></ul>");
 
         $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul")
-            .append("<li><a href='#' id='" + orderId + "-mapimage' href=''><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></div></li>")
-            .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href=''>" + customerAdr + "</a></li>")
+            .append("<li><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></li>")
+            .append("<li class='home'>" + customerAdr + "<a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'>Maps</a></li>")
             .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
 
         var googleMapsUrl = "http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=" + encodeURIComponent(customerAdr) + "," + encodeURIComponent(customerCity) + "&aq=1&t=m&z=11&iwloc=A";
@@ -2352,12 +2356,25 @@ function sign(orderId) {
 }
 
 function clearCanvas() {
+
+	/*if(debugmode==true){
+	var canvas = document.getElementById('imageView');
+	var context = canvas.getContext('2d');
+	context.beginPath();
+	context.moveTo(100, 150);
+	context.lineTo(320, 50);
+	context.stroke();
+	$("#debug").text(canvas.toDataURL().substr(22));
+	}*/
+
     canvas = document.getElementById('imageView');
     context = canvas.getContext('2d');
     context.fillStyle = "rgb(255,255,255)";
     context.fillRect (0, 0, 320, 340);
     context.fillStyle = "rgb(200,200,200)";
     context.fillRect (40, 4, 3, 332);
+    
+
 }
 
 function signSave(orderId) {
@@ -2376,7 +2393,7 @@ function saveImageData(orderId) {
     }
 
     var canvas = document.getElementById('imageView');
-	var signdata = canvas.toDataURL();
+	var signdata = canvas.toDataURL().substr(22);
 	
         if (signdata.length > 128) {
             Basket[currentOrderId]['sign'] = signdata;
