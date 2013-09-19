@@ -92,7 +92,7 @@
     <access origin="http://fluxloop.com" subdomains="true" /> 
     <access origin="http://peppes.no" subdomains="true" /> 
     <access origin="https://peppes.no" subdomains="true" /> 
-       <access origin="http:// googleapis.com" subdomains="true" /> 
+     <access origin="http://googleapis.com" subdomains="true" /> 
     
    
     <!--
