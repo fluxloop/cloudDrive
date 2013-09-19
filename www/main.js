@@ -39,7 +39,7 @@ var peppesDeliveryOrderUrl = peppesApiUrl + "/DeliverDriverOrder";
 
 //Settings
 var desktopModePossible = true;
-var desktopMode = true;
+var desktopMode = false;
 var offlineMode = false;
 var debugmode = true;
 
