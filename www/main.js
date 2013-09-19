@@ -2376,32 +2376,23 @@ function saveImageData(orderId) {
     }
 
     var canvas = document.getElementById('imageView');
-    alert(2);
-    //window.plugins.canvas.toDataURL(canvas, "image/png", success, failure);
-	
-	alert(3);
-	alert(arg.data);
-    function success(arg) {
-        if (arg.size > 0) {
-            Basket[currentOrderId]['sign'] = arg.data;
+	signdata = canvas.toDataURL();
+
+        if (signdata.size > 0) {
+            Basket[currentOrderId]['sign'] = signdata;
             continueAfterSign(currentOrderId);
         } else {
-            alert(arg.debug);
-        }
-    }
+              alert("Signatur feilet: ingen signatur?" + signdata);       
+             }
 
-    function failure(arg) {
-        alert("Signatur feilet: " + arg);
-        $("#saveSignInfo").hide();
-    }
+
+
      continueAfterSign(currentOrderId);
 }
 
 function continueAfterSign(orderId) {
     screenLevel = 5;
-    alert(4);
     clearCanvas();
-    alert(5);
     $("#sign").hide();
     $("#signButton"+orderId).hide();
     $("#showSignButton"+orderId).hide();
