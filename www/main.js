@@ -2366,7 +2366,7 @@ function signSave(orderId) {
 }
 
 function saveImageData(orderId) {
-	alert(1);
+
     var currentOrderId = orderId;
 
     if (desktopMode) {
@@ -2376,13 +2376,13 @@ function saveImageData(orderId) {
     }
 
     var canvas = document.getElementById('imageView');
-	signdata = canvas.toDataURL();
-
-        if (signdata.size > 0) {
+	var signdata = canvas.toDataURL();
+	
+        if (signdata.length > 128) {
             Basket[currentOrderId]['sign'] = signdata;
             continueAfterSign(currentOrderId);
         } else {
-              alert("Signatur feilet: ingen signatur?" + signdata);       
+              alert("Signatur feilet: ingen signatur? " + signdata);       
              }
 
 
