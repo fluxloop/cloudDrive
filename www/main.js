@@ -25,7 +25,7 @@ var ignoreClick = false; //Flag for when click-events should be ignored by under
 var screenLocked = false;
 
 //Urls
-var localDriverOrdersUrl = "http://localhost/FetchDriverTotalOrder.xml";
+var localDriverOrdersUrl = "http://localhost/FetchDriverTotalOrder2.xml";
 var localGiftCardUrl = "http://localhost:8080/giftcard.xml";
 var phoneLocalDriverOrdersUrl = "svarer_27-02-2013.xml";
 var fxlLogUrl = "http://fluxloop.com/peppes/log.php";
@@ -800,16 +800,16 @@ function parseXML(xml) {
         var customerPhone = $(this).find("phone").text();
         var customerInfo = $(this).find("info").text();
         var customerEmail = $(this).find("email").text();
-        var emailList = "<select>";
+        var emailList = "";
   
          $(this).find("email").each(function() {
         
          customerEmail = $(this).text();
-         emailList += '<option value="'+customerEmail+'">'+customerEmail+'</option>';
+         emailList = '<option value="'+customerEmail+'">'+customerEmail+'</option>'+emailList;
          
          });
 	
-		emailList += "<select>";
+		emailList = "<select style='width: 100%;' onChange='emailList(this," + orderId + ");'>"+emailList+"<option value=''>Ingen kvittering</option><select>";
 		
 		
         Basket[orderId]['emailAddress'] = customerEmail;
@@ -976,7 +976,7 @@ function parseXML(xml) {
             $("#signButtons")
                 .append('<div class="button buttons2" id="signButton'+orderId+'" style="display:none" onClick="signSave(' + orderId + ')"><div>Lagre</div></div>');
 
-            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
+            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt" + orderId + "' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
             var deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
             if (desktopMode) {
@@ -1042,7 +1042,7 @@ function parseXML(xml) {
                 .append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
                 .append("<div class='button buttons2 delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
 
-            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
+            var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt" + orderId + "' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
             var deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "'>Forsinket levering (50% rabatt)</div></div>";
             if (desktopMode) {
@@ -1565,6 +1565,13 @@ function calculateAdvancedPayment(orderId) {
     }
 }
 
+function emailList(that,orderId){
+var selectedEmail = $(that).children(':selected').text();
+if(selectedEmail=="Ingen kvittering"){selectedEmail="";}
+$("#emailReceipt"+orderId).val(selectedEmail);
+Basket[orderId]['emailAddress'] = selectedEmail;
+}
+
 function emailChanged(orderId, newEmail) {
     Basket[orderId]['emailAddress'] = newEmail;
 }
@@ -1926,10 +1933,10 @@ function completePayment(orderId, paymentType) {
             var decimals = orderTotal % 1;
             if (decimals >= 0.5) {
                 orderTotal += (1 - decimals);
-                alert("Totalsum er rundet opp til " + orderTotal);
+                //alert("Totalsum er rundet opp til " + orderTotal);
             } else {
                 orderTotal -= decimals;
-                alert("Totalsum er rundet ned til " + orderTotal);
+                //alert("Totalsum er rundet ned til " + orderTotal);
             }
             urlParams += "&paymentMethod=" + paymentMethodCash;
             urlParams += "&paymentAmount=" + orderTotal;
