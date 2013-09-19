@@ -378,6 +378,17 @@ input {
     width: 100%;
 }
 
+/*.destinationsDetailsItem a.mapsbutton{
+	margin: 0;
+	padding-left: 0;
+	padding: 0 3px 0 3px;
+	background-color: #cdcdcd;
+	color: white;
+	display: block;
+	float: right;
+	text-align: center;
+}*/
+
 ul.icon .call a:before {
     left:5px;
     width:4px;

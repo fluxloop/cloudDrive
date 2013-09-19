@@ -39,9 +39,9 @@ var peppesDeliveryOrderUrl = peppesApiUrl + "/DeliverDriverOrder";
 
 //Settings
 var desktopModePossible = true;
-var desktopMode = false;
+var desktopMode = true;
 var offlineMode = false;
-var debugmode = false;
+var debugmode = true;
 
 //Activities
 var activities = [];
@@ -577,7 +577,7 @@ function setGoogleMapLinks(orderId) {
     //Hack'n slash google maps link to support old versions of android (window.open doesn't do what we want).
     //Also prevent the anchor-tag to receive click-events when view is changed
     $("#" + orderId + "-mapaddr").attr('href', Basket[orderId]['googlemaps']);
-    $("#" + orderId + "-mapimage").attr('href', Basket[orderId]['googlemaps']);
+    /*$("#" + orderId + "-mapimage").attr('href', Basket[orderId]['googlemaps']);*/
 }
 
 function onOfflineClick() {
@@ -809,7 +809,7 @@ function parseXML(xml) {
 
         $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul")
             .append("<li><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></li>")
-            .append("<li class='home'>" + customerAdr + "<a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'>Maps</a></li>")
+            .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'>" + customerAdr + "</a></li>")
             .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
 
         var googleMapsUrl = "http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=" + encodeURIComponent(customerAdr) + "," + encodeURIComponent(customerCity) + "&aq=1&t=m&z=11&iwloc=A";
@@ -2357,7 +2357,7 @@ function sign(orderId) {
 
 function clearCanvas() {
 
-	/*if(debugmode==true){
+	if(debugmode==true){
 	var canvas = document.getElementById('imageView');
 	var context = canvas.getContext('2d');
 	context.beginPath();
@@ -2365,7 +2365,7 @@ function clearCanvas() {
 	context.lineTo(320, 50);
 	context.stroke();
 	$("#debug").text(canvas.toDataURL().substr(22));
-	}*/
+	}
 
     canvas = document.getElementById('imageView');
     context = canvas.getContext('2d');
