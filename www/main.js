@@ -2060,7 +2060,9 @@ function completeDelivery(orderId, urlParams, tip) {
     if (Basket[orderId]['sign']) {
         var params = deliveryUrl.slice(deliveryUrl.indexOf("?") + 1, deliveryUrl.length);
         params += "&sign=" + Basket[orderId]['sign'];
-		alert(params);
+        
+		$("#debug").text(params);
+        
         $.ajax({
             type: "POST",
             url: peppesDeliveryOrderUrl,
@@ -2387,8 +2389,7 @@ function saveImageData(orderId) {
     var canvas = document.getElementById('imageView');
 	var signdata = canvas.toDataURL().substr(22);
 	
-	$("#debug").text(signdata);
-	
+		
         if (signdata.length > 128) {
             Basket[currentOrderId]['sign'] = signdata;
             continueAfterSign(currentOrderId);
