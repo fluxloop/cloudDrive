@@ -41,7 +41,7 @@ var peppesDeliveryOrderUrl = peppesApiUrl + "/DeliverDriverOrder";
 var desktopModePossible = true;
 var desktopMode = false;
 var offlineMode = false;
-var debugmode = true;
+var debugmode = false;
 
 //Activities
 var activities = [];
@@ -2066,9 +2066,7 @@ function completeDelivery(orderId, urlParams, tip) {
     if (Basket[orderId]['sign']) {
         var params = deliveryUrl.slice(deliveryUrl.indexOf("?") + 1, deliveryUrl.length);
         params += "&sign=" + Basket[orderId]['sign'];
-        
-		$("#debug").text(params);
-        
+               
         $.ajax({
             type: "POST",
             url: peppesDeliveryOrderUrl,
@@ -2448,15 +2446,10 @@ function testConnection() {
 
 if(debugmode==true){
 
+$("#debug").show();
 
 function debug() {
-var canvas = document.getElementById('imageView');
-var context = canvas.getContext('2d');
-context.beginPath();
-context.moveTo(100, 150);
-context.lineTo(320, 50);
-context.stroke();
-$("#debug").text(canvas.toDataURL().substr(22));
+
 }
 
 }
