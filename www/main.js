@@ -25,7 +25,7 @@ var ignoreClick = false; //Flag for when click-events should be ignored by under
 var screenLocked = false;
 
 //Urls
-var localDriverOrdersUrl = "http://localhost:8080/driver/svarer_27-02-2013.xml?bust="+Math.floor(Math.random()*100);
+var localDriverOrdersUrl = "http://localhost/FetchDriverTotalOrder.xml";
 var localGiftCardUrl = "http://localhost:8080/giftcard.xml";
 var phoneLocalDriverOrdersUrl = "svarer_27-02-2013.xml";
 var fxlLogUrl = "http://fluxloop.com/peppes/log.php";
@@ -800,6 +800,10 @@ function parseXML(xml) {
         var customerPhone = $(this).find("phone").text();
         var customerInfo = $(this).find("info").text();
         var customerEmail = $(this).find("email").text();
+        
+         $(this).find("email").each(function() {
+         customerEmail = $(this).text();
+         });
 
         Basket[orderId]['emailAddress'] = customerEmail;
 
@@ -971,6 +975,8 @@ function parseXML(xml) {
             if (desktopMode) {
                 deliveryLateText = "<div class='deliveryLate'><div class='tap' title='" + orderId + "' id='deliveryLateItem" + orderId + "' onclick='deliveryLateClick(" + orderId + ")'>Forsinket levering (50% rabatt)</div></div>";
             }
+
+			/* add all emails */
 
             $("#payment #paymentButtons #paymentSelection" + orderId)
                 .append(deliveryLateText)
@@ -2380,15 +2386,13 @@ function saveImageData(orderId) {
 
     var currentOrderId = orderId;
 
-    if (desktopMode) {
-        Basket[orderId]['sign'] = 1;
-        continueAfterSign(orderId);
-        return;
-    }
+
 
     var canvas = document.getElementById('imageView');
 	var signdata = canvas.toDataURL().substr(22);
 	
+	signdata = signdata.replace(/\+/g, '-');
+	signdata = signdata.replace(/\//g, '_');
 		
         if (signdata.length > 128) {
             Basket[currentOrderId]['sign'] = signdata;
@@ -2396,8 +2400,6 @@ function saveImageData(orderId) {
         } else {
               alert("Signatur feilet: ingen signatur? " + signdata);       
              }
-
-
 
      continueAfterSign(currentOrderId);
 }
