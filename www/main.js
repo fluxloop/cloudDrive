@@ -682,6 +682,10 @@ function parseXML(xml) {
             if (placement) {
                 placementHtml = "<span class=\"placement\">" + placement + "</span>";
             }
+            
+            if (groupName=="Pizza" && placement==""){
+            	alert("OBS! "+$(this).text()+" "+serialno+" er enda ikke satt i hylle.");
+            }
 
             $("#productList").append("<div class='listitem' style='line-height: inherit; height: inherit; position: relative;'><a id='" + groupName + "-" + serialno + "-" + listItemId + "'><strong>" + $(this).text() + "</strong><em>" + listItemText + "</em>" + placementHtml +"</a></div>");
         });
