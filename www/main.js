@@ -71,6 +71,26 @@ function init() {
     document.addEventListener("deviceready", onDeviceReady, false);
 }
 
+var debugOnCounter=0;
+function debugOn(){
+	
+	debugOnCounter++;
+	if(debugOnCounter==5){
+	
+	navigator.notification.confirm(
+	    'Vil du aktivere debug? (Pizza blir ikke levert, men logget)', // message
+	     onConfirmDebug, // callback to invoke with index of button pressed
+	    'Debug', // title
+	    'Ja,Nei' // buttonLabels
+	);
+	}
+}
+
+function onConfirmDebug(){
+		peppesApiUrl = "http://fluxloop.com/debug.php";
+}
+
+
 function onDeviceReady(){
     /* start canvas*/
     clearCanvas();
@@ -610,7 +630,6 @@ function loadXML(employeeId){
     if(employeeId=="12345"){
         //TODO: Change URL
         //xmlURL = fxlDriverOrdersUrl + GetUnixTime();
-
         xmlURL = phoneLocalDriverOrdersUrl;
         if(desktopMode) {
             xmlURL = localDriverOrdersUrl;
