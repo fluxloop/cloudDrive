@@ -87,6 +87,9 @@ function debugOn(){
 
 function onConfirmDebug(){
 		peppesApiUrl = "http://fluxloop.com/debug.php";
+		peppesDriverOrdersUrl = "http://fluxloop.com/debug.php";
+		peppesEGCUrl = "http://fluxloop.com/debug.php";
+		peppesDeliveryOrderUrl = "http://fluxloop.com/debug.php";
 }
 
 
