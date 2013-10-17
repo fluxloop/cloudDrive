@@ -73,10 +73,9 @@ function init() {
 
 var debugOnCounter=0;
 function debugOn(){
-	
+	alert(debugOnCounter);
 	debugOnCounter++;
 	if(debugOnCounter==5){
-	
 	navigator.notification.confirm(
 	    'Vil du aktivere debug? (Pizza blir ikke levert, men logget)', // message
 	     onConfirmDebug, // callback to invoke with index of button pressed
