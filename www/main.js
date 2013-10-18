@@ -449,14 +449,14 @@ function checkVersion() {
     });
 }
 
-function Log(activity) {
-    LogAppActivity(localStorage['userID'], lastOrderId, activity);
+function Log(activity,logdata) {
+    LogAppActivity(localStorage['userID'], lastOrderId, activity,logdata);
 }
 
-function LogAppActivity(employeeId, orderId, activity) {
-    var params = "?uid=" + employeeId + "&oid=" + orderId + "&act=" + activity;
+function LogAppActivity(employeeId, orderId, activity, logdata) {
+    var params = "?uid=" + employeeId + "&oid=" + orderId + "&act=" + activity + "&logdata=" +logdata;
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: (fxlLogUrl + params),
         success: function(result) {
             //Do nothing
@@ -466,6 +466,8 @@ function LogAppActivity(employeeId, orderId, activity) {
         }
     });
 }
+
+
 
 function checkForConnectionAtLoad() {
     var networkState = (navigator.network !== undefined) ? navigator.network.connection.type : "desktop";
@@ -2116,7 +2118,7 @@ function completeDelivery(orderId, urlParams, tip) {
                 if(xmlstr != "<result/>") {
                     alert(xmlstr);
                 } else {
-                    Log(activities['OrderDelivered']);
+                    Log(activities['OrderDelivered'],params);
                 }
             },
 
@@ -2134,7 +2136,7 @@ function completeDelivery(orderId, urlParams, tip) {
                 if(xmlstr != "<result/>") {
                     alert(xmlstr);
                 } else {
-                    Log(activities['OrderDelivered']);
+                    Log(activities['OrderDelivered'],params);
                 }
             },
             error: function(e) {
@@ -2256,6 +2258,7 @@ function backToList(){
 }
 
 function arriveAtCustomer() {
+	Log(activities['arriveAtCustomer']);
     showDestinationItemList();
 }
 
