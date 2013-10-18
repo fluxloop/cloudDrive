@@ -450,12 +450,13 @@ function checkVersion() {
 }
 
 function Log(activity,logdata) {
+	alert(logdata);
     LogAppActivity(localStorage['userID'], lastOrderId, activity,logdata);
 }
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
     var params = "?uid=" + employeeId + "&oid=" + orderId + "&act=" + activity + "&logdata=" +logdata;
-    
+    alert(logdata);
      $.ajax({
                 type: "POST",
                 url: fxlLogUrl,
@@ -472,7 +473,7 @@ function LogAppActivity(employeeId, orderId, activity, logdata) {
     
                 error: function(e) {
                  	//Do nothing
-                    //alert("Kunne ikke logge.");
+                    alert("Kunne ikke logge.");
                 }
             });    
 }
