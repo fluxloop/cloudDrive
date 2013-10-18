@@ -56,6 +56,7 @@ activities['AddGiftCard'] = 'AddGiftCard';
 activities['NewGiftCardIssued'] = 'NewGiftCardIssued';
 activities['OrderPaidByGiftCard'] = 'OrderPaidByGiftCard';
 activities['arriveAtCustomer'] = 'arriveAtCustomer';
+activities['ajaxError'] = 'ajaxError';
 
 
 function init() {
@@ -2119,14 +2120,16 @@ function completeDelivery(orderId, urlParams, tip) {
                 var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
                 if(xmlstr != "<result/>") {
                     alert(xmlstr);
+                    Log(activities['ajaxError'],xmlstr);
                 } else {
-                    Log(activities['OrderDelivered'],params);
+                    // do nothing
                 }
             },
 
             error: function(e) {
                 alert("Kunne ikke levere pizza.");
             }
+           Log(activities['OrderDelivered'],params);
         });
     } else {
         $.ajax({
@@ -2137,13 +2140,15 @@ function completeDelivery(orderId, urlParams, tip) {
                 var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
                 if(xmlstr != "<result/>") {
                     alert(xmlstr);
+                    Log(activities['ajaxError'],xmlstr);
                 } else {
-                    Log(activities['OrderDelivered'],params);
+                    // do nothing
                 }
             },
             error: function(e) {
                 alert("Kunne ikke levere pizza.");
             }
+            Log(activities['OrderDelivered'],params);
         });
     }
 
