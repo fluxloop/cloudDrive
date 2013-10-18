@@ -450,6 +450,9 @@ function checkVersion() {
 }
 
 function Log(activity,logdata) {
+	if(!logdata){
+		logdata="0";
+	}
 	alert(logdata);
     LogAppActivity(localStorage['userID'], lastOrderId, activity,logdata);
 }
