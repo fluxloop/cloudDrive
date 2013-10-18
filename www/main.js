@@ -73,7 +73,7 @@ function init() {
 
 var debugOnCounter=0;
 function debugOn(){
-	alert(debugOnCounter);
+	//alert(debugOnCounter);
 	debugOnCounter++;
 	if(debugOnCounter==5){
 	navigator.notification.confirm(
@@ -86,7 +86,7 @@ function debugOn(){
 }
 
 function onConfirmDebug(){
-		peppesApiUrl = "http://fluxloop.com/debug.php";
+		//peppesApiUrl = "http://fluxloop.com/debug.php";
 		peppesDriverOrdersUrl = "http://fluxloop.com/debug.php";
 		peppesEGCUrl = "http://fluxloop.com/debug.php";
 		peppesDeliveryOrderUrl = "http://fluxloop.com/debug.php";
