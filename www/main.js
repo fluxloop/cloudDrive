@@ -455,19 +455,29 @@ function Log(activity,logdata) {
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
     var params = "?uid=" + employeeId + "&oid=" + orderId + "&act=" + activity + "&logdata=" +logdata;
-    $.ajax({
-        type: "POST",
-        url: peppesDeliveryOrderUrl,
-        dataType: "xml",
-        data: params,
-        success: function(result) {
-            //Do nothing
-        },
-        error: function() {
-            //Do nothing
-        }
-    });
+    
+     $.ajax({
+                type: "POST",
+                url: fxlLogUrl,
+                dataType: "xml",
+                data: params,
+                success: function(xml) {
+                    var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
+                    if(xmlstr != "<result/>") {
+                        alert(xmlstr);
+                    } else {
+                        //Do nothing
+                    }
+                },
+    
+                error: function(e) {
+                 	//Do nothing
+                    //alert("Kunne ikke logge.");
+                }
+            });    
 }
+
+
 
 
 
