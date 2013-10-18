@@ -453,32 +453,14 @@ function Log(activity,logdata) {
 	if(!logdata){
 		logdata="0";
 	}
-	alert(logdata);
     LogAppActivity(localStorage['userID'], lastOrderId, activity,logdata);
 }
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
-    var params = "?uid=" + employeeId + "&oid=" + orderId + "&act=" + activity + "&logdata=" +logdata;
-    alert(logdata);
-     $.ajax({
-                type: "POST",
-                url: fxlLogUrl,
-                dataType: "xml",
-                data: params,
-                success: function(xml) {
-                    var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
-                    if(xmlstr != "<result/>") {
-                        alert(xmlstr);
-                    } else {
-                        //Do nothing
-                    }
-                },
-    
-                error: function(e) {
-                 	//Do nothing
-                    alert("Kunne ikke logge.");
-                }
-            });    
+            $.post( fxlLogUrl, { uid: employeeId, oid: orderId, act: activity, logdata: logdata })
+              .done(function( data ) {
+                alert( "Returned " + data );
+              });  
 }
 
 
