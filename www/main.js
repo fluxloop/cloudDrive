@@ -55,6 +55,8 @@ activities['Login'] = 'Login';
 activities['AddGiftCard'] = 'AddGiftCard';
 activities['NewGiftCardIssued'] = 'NewGiftCardIssued';
 activities['OrderPaidByGiftCard'] = 'OrderPaidByGiftCard';
+activities['arriveAtCustomer'] = 'arriveAtCustomer';
+
 
 function init() {
     if( navigator.userAgent == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36" ){
@@ -450,13 +452,15 @@ function checkVersion() {
 }
 
 function Log(activity,logdata) {
+	alert(logdata)
 	if(!logdata){
 		logdata="0";
 	}
-    LogAppActivity(localStorage['userID'], lastOrderId, activity,logdata);
+    LogAppActivity(localStorage['userID'], lastOrderId, activity, logdata);
 }
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
+			alert(logdata)
             $.post( fxlLogUrl, { uid: employeeId, oid: orderId, act: activity, logdata: logdata })
               .done(function( data ) {
                 alert( "Returned " + data );
