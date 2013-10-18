@@ -457,7 +457,9 @@ function LogAppActivity(employeeId, orderId, activity, logdata) {
     var params = "?uid=" + employeeId + "&oid=" + orderId + "&act=" + activity + "&logdata=" +logdata;
     $.ajax({
         type: "POST",
-        url: (fxlLogUrl + params),
+        url: peppesDeliveryOrderUrl,
+        dataType: "xml",
+        data: params,
         success: function(result) {
             //Do nothing
         },
