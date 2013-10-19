@@ -636,12 +636,17 @@ div#calculator, div#padlock, div#reset {
 .advancedPayment ul {
     list-style: none;
     width: 96%;
-    line-height: 34px;
     padding: 0;
+    display: block;
+    float: left;
 }
 
 .advancedPayment ul li {
     border-bottom: 1px solid #666;
+    display: block;
+    float: left;
+    margin: 0 0 4px 0;
+    padding: 2px 0 2px 0;
 }
 
 .advancedPayment ul li input, .advancedPayment ul li em {
