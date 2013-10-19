@@ -453,17 +453,18 @@ function checkVersion() {
 
 function Log(activity,logdata) {
 	
-	if(!logdata){
+	/*if(!logdata){
 		logdata="";
-	}
+	}*/
+	
     LogAppActivity(localStorage['userID'], lastOrderId, activity, logdata);
 }
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
-			alert(logdata)
+			
             $.post( fxlLogUrl, { uid: employeeId, oid: orderId, act: activity, logdata: logdata })
               .done(function( data ) {
-                //alert( "Returned " + data );
+               
               });  
 }
 
@@ -2156,9 +2157,9 @@ function completeDelivery(orderId, urlParams, tip) {
     $("#destinationList .delivered").append("<div class='destinationListItem listitem' onClick='viewCustomer(" + orderId + ")' id='listItem" + orderId + "'></div>");
     $("#destinationList .delivered #listItem"+orderId).append(deliveredHTML);
 
-    if (Basket[orderId]['lateDelivery'],deliveryUrl) {
+    if (Basket[orderId]['lateDelivery']) {
         $("#destinationList .delivered #listItem" + orderId + " em").html("Forsinket!");
-        Log(activities['OrderDeliveredLate']);
+        Log(activities['OrderDeliveredLate'],deliveryUrl);
     } else {
         $("#destinationList .delivered #listItem" + orderId + " em").html("OK!");
         Log(activities['OrderDelivered'],deliveryUrl);
