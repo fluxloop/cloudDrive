@@ -452,9 +452,9 @@ function checkVersion() {
 }
 
 function Log(activity,logdata) {
-	alert(logdata)
+	
 	if(!logdata){
-		logdata="0";
+		logdata="";
 	}
     LogAppActivity(localStorage['userID'], lastOrderId, activity, logdata);
 }
@@ -463,7 +463,7 @@ function LogAppActivity(employeeId, orderId, activity, logdata) {
 			alert(logdata)
             $.post( fxlLogUrl, { uid: employeeId, oid: orderId, act: activity, logdata: logdata })
               .done(function( data ) {
-                alert( "Returned " + data );
+                //alert( "Returned " + data );
               });  
 }
 
@@ -2129,7 +2129,7 @@ function completeDelivery(orderId, urlParams, tip) {
                 alert("Kunne ikke levere pizza.");
             }
         });
-        Log(activities['OrderDelivered'],params);
+       
     } else {
         $.ajax({
             type: "GET",
@@ -2148,7 +2148,7 @@ function completeDelivery(orderId, urlParams, tip) {
                 alert("Kunne ikke levere pizza.");
             }
         });
-        Log(activities['OrderDelivered'],params);
+       
     }
 
     var deliveredHTML = $("#listItem"+orderId).html();
@@ -2156,12 +2156,12 @@ function completeDelivery(orderId, urlParams, tip) {
     $("#destinationList .delivered").append("<div class='destinationListItem listitem' onClick='viewCustomer(" + orderId + ")' id='listItem" + orderId + "'></div>");
     $("#destinationList .delivered #listItem"+orderId).append(deliveredHTML);
 
-    if (Basket[orderId]['lateDelivery']) {
+    if (Basket[orderId]['lateDelivery'],deliveryUrl) {
         $("#destinationList .delivered #listItem" + orderId + " em").html("Forsinket!");
         Log(activities['OrderDeliveredLate']);
     } else {
         $("#destinationList .delivered #listItem" + orderId + " em").html("OK!");
-        Log(activities['OrderDelivered']);
+        Log(activities['OrderDelivered'],deliveryUrl);
     }
 
     $("#destinationList .delivered #listItem" + orderId + " em").removeClass("timestamp");
