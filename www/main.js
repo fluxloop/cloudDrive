@@ -56,8 +56,7 @@ activities['AddGiftCard'] = 'AddGiftCard';
 activities['NewGiftCardIssued'] = 'NewGiftCardIssued';
 activities['OrderPaidByGiftCard'] = 'OrderPaidByGiftCard';
 activities['arriveAtCustomer'] = 'arriveAtCustomer';
-activities['ajaxError'] = 'ajaxError';
-
+activities['error'] = 'error';
 
 function init() {
     if( navigator.userAgent == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36" ){
@@ -2120,17 +2119,17 @@ function completeDelivery(orderId, urlParams, tip) {
                 var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
                 if(xmlstr != "<result/>") {
                     alert(xmlstr);
-                    Log(activities['ajaxError'],xmlstr);
+                    Log(activities['error'],xmlstr);
                 } else {
-                    // do nothing
+                 	//do nothing   
                 }
             },
 
             error: function(e) {
                 alert("Kunne ikke levere pizza.");
             }
-           Log(activities['OrderDelivered'],params);
         });
+        Log(activities['OrderDelivered'],params);
     } else {
         $.ajax({
             type: "GET",
@@ -2140,16 +2139,16 @@ function completeDelivery(orderId, urlParams, tip) {
                 var xmlstr = xml.xml ? xml.xml : (new XMLSerializer()).serializeToString(xml);
                 if(xmlstr != "<result/>") {
                     alert(xmlstr);
-                    Log(activities['ajaxError'],xmlstr);
+                    Log(activities['error'],xmlstr);
                 } else {
-                    // do nothing
+                    //do nothing   
                 }
             },
             error: function(e) {
                 alert("Kunne ikke levere pizza.");
             }
-            Log(activities['OrderDelivered'],params);
         });
+        Log(activities['OrderDelivered'],params);
     }
 
     var deliveredHTML = $("#listItem"+orderId).html();
