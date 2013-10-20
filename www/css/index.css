@@ -673,9 +673,9 @@ div#calculator, div#padlock, div#reset {
     background-color: #fff;
 }
 
-.tap {
-    padding-left: 24px;
-    width: 296px;
+.advancedPayment ul li.tap {
+    padding-left: 10%!important;
+    width: 90%!important;
     float: left;
     background-image: url('../img/checkbox-unchecked.png');
     background-position: left;
