@@ -675,6 +675,8 @@ div#calculator, div#padlock, div#reset {
 
 .tap {
     padding-left: 24px;
+    width: 296px;
+    float: left;
     background-image: url('../img/checkbox-unchecked.png');
     background-position: left;
     background-repeat: no-repeat;
