@@ -674,8 +674,7 @@ div#calculator, div#padlock, div#reset {
 }
 
 .tap {
-	display: block;
-    float: left;
+    padding-left: 24px;
     background-image: url('../img/checkbox-unchecked.png');
     background-position: left;
     background-repeat: no-repeat;
@@ -683,12 +682,8 @@ div#calculator, div#padlock, div#reset {
 
 .tap.selected, .enabled div.tap {
     background-image: url('../img/checkbox-checked.png');
-}
-
-.tap em{
-	display: block;
-	float: left;
-	margin-left: 24px;
+    background-position: left;
+    background-repeat: no-repeat;
 }
 
 li.egcStart {
