@@ -1264,7 +1264,7 @@ function createAdvancedPaymentMarkup(orderId) {
         if (pm['discountCodeRequired'] == 'true') {
             $("#" + pm['code'] + "-" + orderId + "-li input").removeClass('payable').addClass('subtractable');
             var $advPaymentLi = $("#" + pm['code'] + "-" + orderId + "-li");
-            $advPaymentLi.after("<li id='" + pm['code'] + "-" + orderId + "-discount' class='tap required disabled'><em>Rabattkode: <span>ingen valgt</span></em></li>");
+            $advPaymentLi.after("<li id='" + pm['code'] + "-" + orderId + "-discount' class='tap required disabled'>Rabattkode: <span>ingen valgt</span></li>");
             $advPaymentLi.focusout(function(e) {
                 onDiscountValueChanged(e);
             });
@@ -1273,7 +1273,7 @@ function createAdvancedPaymentMarkup(orderId) {
         if(pm['complaintCodeRequired'] == 'true') {
             $("#" + pm['code'] + "-" + orderId + "-li input").removeClass('payable').addClass('subtractable');
             var $advPaymentLi = $("#" + pm['code'] + "-" + orderId + "-li");
-            $advPaymentLi.after("<li id='" + pm['code'] + "-" + orderId + "-complaint' class='tap required disabled'><em>Reklamasjonskode: <span>ingen valgt</span></em></li>");
+            $advPaymentLi.after("<li id='" + pm['code'] + "-" + orderId + "-complaint' class='tap required disabled'>Reklamasjonskode: <span>ingen valgt</span></li>");
             $advPaymentLi.focusout(function(e) {
                 onComplaintValueChanged(e);
             });
@@ -1304,7 +1304,7 @@ function createAdvancedPaymentMarkup(orderId) {
 
      $("#advancedPayment" + orderId + " ul")
         .append(orderDiscountAdvancedPaymentText)
-        .append("<li><div class='lateDelivery tap' id='lateDeliveryCheckbox" + orderId + "'><em>Forsinket levering (50% rabatt)</em><input type='number' class='lateDelivery' disabled='disabled' value='" + Basket[orderId]['baseOrderTotalRebate'] + "'/></div></li>")
+        .append("<li><div class='lateDelivery tap' id='lateDeliveryCheckbox" + orderId + "'>Forsinket levering (50% rabatt)<input type='number' class='lateDelivery' disabled='disabled' value='" + Basket[orderId]['baseOrderTotalRebate'] + "'/></div></li>")
         .append("<li id='advancedPaymentRemaining" + orderId + "' class='title'>Gjenst&aring;ende &aring; betale</li>")
         .append("<li id='advancedPaymentTip" + orderId + "' class='title'>Tips</li>");
 
