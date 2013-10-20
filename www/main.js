@@ -1264,7 +1264,7 @@ function createAdvancedPaymentMarkup(orderId) {
         if (pm['discountCodeRequired'] == 'true') {
             $("#" + pm['code'] + "-" + orderId + "-li input").removeClass('payable').addClass('subtractable');
             var $advPaymentLi = $("#" + pm['code'] + "-" + orderId + "-li");
-            $advPaymentLi.after("<li id='" + pm['code'] + "-" + orderId + "-discount' class='tap required disabled'>Rabattkode: <span>ingen valgt</span></li>");
+            $advPaymentLi.after("<li><div id='" + pm['code'] + "-" + orderId + "-discount' class='tap required disabled'>Rabattkode: <span>ingen valgt</span></div></li>");
             $advPaymentLi.focusout(function(e) {
                 onDiscountValueChanged(e);
             });
@@ -1273,7 +1273,7 @@ function createAdvancedPaymentMarkup(orderId) {
         if(pm['complaintCodeRequired'] == 'true') {
             $("#" + pm['code'] + "-" + orderId + "-li input").removeClass('payable').addClass('subtractable');
             var $advPaymentLi = $("#" + pm['code'] + "-" + orderId + "-li");
-            $advPaymentLi.after("<li id='" + pm['code'] + "-" + orderId + "-complaint' class='tap required disabled'>Reklamasjonskode: <span>ingen valgt</span></li>");
+            $advPaymentLi.after("<li><div id='" + pm['code'] + "-" + orderId + "-complaint' class='tap required disabled'>Reklamasjonskode: <span>ingen valgt</span></div></li>");
             $advPaymentLi.focusout(function(e) {
                 onComplaintValueChanged(e);
             });
