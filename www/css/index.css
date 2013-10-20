@@ -673,9 +673,8 @@ div#calculator, div#padlock, div#reset {
     background-color: #fff;
 }
 
-.advancedPayment ul li.tap {
-    padding-left: 10%!important;
-    width: 90%!important;
+.tap {
+	display: block;
     float: left;
     background-image: url('../img/checkbox-unchecked.png');
     background-position: left;
@@ -684,6 +683,12 @@ div#calculator, div#padlock, div#reset {
 
 .tap.selected, .enabled div.tap {
     background-image: url('../img/checkbox-checked.png');
+}
+
+.tap em{
+	display: block;
+	float: left;
+	margin-left: 24px;
 }
 
 li.egcStart {
