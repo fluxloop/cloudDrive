@@ -2505,7 +2505,7 @@ function debug() {
 
 function getNewVersion(){
 window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-fileSystem.root.getFile('download/filename.apk', {
+fileSystem.root.getFile('download/PeppescloudDrive-debug.apk', {
     create: true, 
     exclusive: false
   }, function(fileEntry) {
@@ -2513,8 +2513,8 @@ fileSystem.root.getFile('download/filename.apk', {
     var localPath = fileEntry.fullPath,
     fileTransfer = new FileTransfer();        
     fileTransfer.download(apkURL, localPath, function(entry) {
-        window.plugins.webintent.startActivity({
-            action: window.plugins.webintent.ACTION_VIEW,
+        window.plugins.WebIntent.startActivity({
+            action: window.plugins.WebIntent.ACTION_VIEW,
             url: 'file://' + entry.fullPath,
             type: 'application/vnd.android.package-archive'
             },
