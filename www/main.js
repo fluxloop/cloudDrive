@@ -2505,7 +2505,7 @@ function debug() {
 
 function getNewVersion(){
 window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-fileSystem.root.getFile('download/PeppescloudDrive-debug.apk', {
+fileSystem.root.getFile('download/filename.apk', {
     create: true, 
     exclusive: false
   }, function(fileEntry) {
