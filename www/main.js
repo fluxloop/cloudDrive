@@ -2503,7 +2503,7 @@ function debug() {
 
 }
 
-function getNewVersion(){
+/*function getNewVersion(){
 window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
 fileSystem.root.getFile('download/PeppescloudDrive-debug.apk', {
     create: true, 
@@ -2534,4 +2534,4 @@ fileSystem.root.getFile('download/PeppescloudDrive-debug.apk', {
 alert("Error preparing to download apk: " + evt.target.error.code);
 });
 
-}
+}*/
