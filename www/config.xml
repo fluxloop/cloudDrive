@@ -106,5 +106,5 @@
 
 	<gap:platform name="ios" />
 	<gap:platform name="android" />
-	<gap:plugin name="com.borismus.webintent" version="0.1.0" />
+	<gap:plugin name="com.borismus.webintent.WebIntent" version="0.1.0" />
 </widget>
