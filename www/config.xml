@@ -53,7 +53,7 @@
         <gap:plugin name="Example" />
         A list of available plugins are available at https://build.phonegap.com/docs/plugins
     -->
-    <gap:plugin name="com.borismus.webintent" />
+   
 
     <!-- Define app icon for each platform. -->
     <icon src="icon.png" />
@@ -106,5 +106,5 @@
 
 	<gap:platform name="ios" />
 	<gap:platform name="android" />
-	
+	<gap:plugin name="com.borismus.webintent" version="0.1.0" />
 </widget>
