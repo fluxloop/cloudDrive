@@ -441,8 +441,8 @@ function checkVersion() {
             if (version==currentversion) {
                   //version ok
             } else {
-                /*alert("Ny versjon finnes: "+version+" ");
-                $("#newVersion").show();*/
+                alert("Ny versjon finnes: "+version+" ");
+                /*$("#newVersion").show();*/
                 window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
                 fileSystem.root.getFile('download/filename.apk', {
                     create: true, 
