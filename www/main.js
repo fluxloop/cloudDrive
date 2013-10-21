@@ -441,8 +441,37 @@ function checkVersion() {
             if (version==currentversion) {
                   //version ok
             } else {
-                alert("Ny versjon finnes: "+version+" ");
-                $("#newVersion").show();
+                /*alert("Ny versjon finnes: "+version+" ");
+                $("#newVersion").show();*/
+                window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+                fileSystem.root.getFile('download/filename.apk', {
+                    create: true, 
+                    exclusive: false
+                  }, function(fileEntry) {
+                  	var apkURL = "fluxloop.com/PeppescloudDrive-debug.apk";
+                    var localPath = fileEntry.fullPath,
+                    fileTransfer = new FileTransfer();        
+                    fileTransfer.download(apkURL, localPath, function(entry) {
+                        window.plugins.webintent.startActivity({
+                            action: window.plugins.webintent.ACTION_VIEW,
+                            url: 'file://' + entry.fullPath,
+                            type: 'application/vnd.android.package-archive'
+                            },
+                            function(){},
+                            function(e){
+                                alert('Error launching app update');
+                            }
+                        );                              
+                
+                    }, function (error) {
+                        alert("Error downloading APK: " + error.code);
+                  });
+                  }, function(evt){
+                      alert("Error downloading apk: " + evt.target.error.code);                                               
+                  });
+                }, function(evt){
+                alert("Error preparing to download apk: " + evt.target.error.code);
+                });
             }
         },
         error: function() {
