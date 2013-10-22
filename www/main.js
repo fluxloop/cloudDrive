@@ -9,7 +9,7 @@ var DiscountCodes = [];
 var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
-var currentversion='3.0';
+var currentversion='3.1';
 
 //Payment methods
 var paymentMethodCash = "K";
