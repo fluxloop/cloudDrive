@@ -854,6 +854,8 @@ function parseXML(xml) {
             .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
             
             if(cellPhoneNumber==customerPhone){
+            //do nothing
+            }else{            
             $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul").append("<li class='call'><a href='tel:" + cellPhoneNumber + "' >" + cellPhoneNumber + "</a></li>");
 			}
 			
