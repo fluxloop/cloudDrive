@@ -851,12 +851,12 @@ function parseXML(xml) {
         $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul")
             .append("<li><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></li>")
             .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'>" + customerAdr + "</a></li>")
-            .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
+            .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + " kundetelefon</a></li>");
             
             if(cellPhoneNumber==customerPhone){
             //do nothing
             }else{            
-            $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul").append("<li class='call'><a href='tel:" + cellPhoneNumber + "' >" + cellPhoneNumber + "</a></li>");
+            $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul").append("<li class='call'><a href='tel:" + cellPhoneNumber + "' >" + cellPhoneNumber + " ordretelefon</a></li>");
 			}
 			
         var googleMapsUrl = "http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=" + encodeURIComponent(customerAdr) + "," + encodeURIComponent(customerCity) + "&aq=1&t=m&z=11&iwloc=A";
