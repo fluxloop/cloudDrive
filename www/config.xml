@@ -96,7 +96,7 @@
     <access origin="http://fluxloop.com" subdomains="true" /> 
     <access origin="http://peppes.no" subdomains="true" /> 
     <access origin="https://peppes.no" subdomains="true" /> 
-     <access origin="http://googleapis.com" subdomains="true" /> 
+    <access origin="http://googleapis.com" subdomains="true" /> 
     
    
     <!--
@@ -105,7 +105,8 @@
         <access origin="http://phonegap.com" browserOnly="true" /> - only allows http://phonegap.com to be opened by the child browser.
     -->
     <gap:plugin name="org.apache.cordova.device" />
-
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    
 	<gap:platform name="ios" />
 	<gap:platform name="android" />
 

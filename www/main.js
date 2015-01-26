@@ -2230,7 +2230,7 @@ var deliveryReturn = function(orderID) {
     }
 
     navigator.notification.confirm(
-        'Retunere orderen? ', //message
+        'Returnere ordren? ', //message
          onConfirm, //callback to invoke with index of button pressed
         'Levering', //title
         'Ja,Nei' //buttonLabels
