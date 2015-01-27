@@ -108,6 +108,10 @@
     -->
     <gap:plugin name="org.apache.cordova.device" />
     <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="org.apache.cordova.media" />
+    <gap:plugin name="org.apache.cordova.network-information" />
+
     
 	<gap:platform name="ios" />
 	<gap:platform name="android" />
