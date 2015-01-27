@@ -146,7 +146,8 @@ function onDeviceReady(){
     /* Version Check*/
     checkVersion();
 
-    addTouchListener("calculator", onCalculatorClick);
+    //addTouchListener("calculator", onCalculatorClick);
+        $("#calculator").click(onCalculatorClick);
     addTouchListener("padlock", onPadLockClick);
     addTouchListener("reset", onResetClick);
 
@@ -452,16 +453,16 @@ function checkVersion() {
 }
 
 function Log(activity,logdata) {
-	
-	/*if(!logdata){
-		logdata="";
-	}*/
-	
+    
+    /*if(!logdata){
+        logdata="";
+    }*/
+    
     LogAppActivity(localStorage['userID'], lastOrderId, activity, logdata);
 }
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
-			
+            
             $.post( fxlLogUrl, { uid: employeeId, oid: orderId, act: activity, logdata: logdata })
               .done(function( data ) {
                
@@ -603,8 +604,16 @@ function setGoogleMapLinks(orderId) {
 
     //Hack'n slash google maps link to support old versions of android (window.open doesn't do what we want).
     //Also prevent the anchor-tag to receive click-events when view is changed
-    $("#" + orderId + "-mapaddr").attr('href', Basket[orderId]['googlemaps']);
+
+    $("#" + orderId + "-mapaddr").click( function() { showMap(orderId); return false; } );
+    //$("#" + orderId + "-mapaddr").attr('href', Basket[orderId]['googlemaps']);
     /*$("#" + orderId + "-mapimage").attr('href', Basket[orderId]['googlemaps']);*/
+}
+
+function showMap(orderId){
+    var ref = window.open(Basket[orderId]['googlemaps'], '_blank', 'location=yes');
+    ref.addEventListener('loadstart', function(event) { alert(event.url); });
+
 }
 
 function onOfflineClick() {
