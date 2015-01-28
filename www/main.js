@@ -2335,7 +2335,7 @@ function GetUnixTime() {
 
 // Time ago
 function timeAgo(timestamp) {
-    since = ((timestamp)- GetUnixTime()) / (60 * 60 * 24);
+    since = ((timestamp)- GetUnixTime()) / (60 * 1000);
     since = Math.ceil(-since);
 
     if (since >= 50) {
