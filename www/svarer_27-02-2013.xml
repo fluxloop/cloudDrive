@@ -57,7 +57,7 @@
 </group>
 </products>
 <orders>
-<order delivered="false" deliveryWithin="1361963912000" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="false" serialno="2" timestamp="1361960352000">
+<order delivered="false" deliveryWithin="1422433503731" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="true" serialno="2" timestamp="1422433503731">
 <giftcards>
 <giftcard amount="100.0" id="101219178"/>
 </giftcards>
@@ -90,7 +90,7 @@
 <orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
 </items>
 </order>
-<order delivered="false" deliveryWithin="1361963973000" id="44825559" notify="false" orderDiscount="0.0" orderTotal="301.0" orderphone="62576787" payment="cash" preorder="false" serialno="3" timestamp="1361960384000">
+<order delivered="false" deliveryWithin="1422433503731" id="44825559" notify="false" orderDiscount="0.0" orderTotal="301.0" orderphone="62576787" payment="cash" preorder="false" serialno="3" timestamp="1422433503731">
 <customer id="11190438">
 <firstname>TORMOD</firstname>
 <lastname>ØVERLIER</lastname>
@@ -122,7 +122,7 @@
 <orderline number="4" price="75.0" qty="1.0">Kjøretillegg</orderline>
 </items>
 </order>
-<order delivered="false" deliveryWithin="1361963999000" id="44825564" notify="false" orderDiscount="0.0" orderTotal="368.0" orderphone="62576787" payment="cash" preorder="false" serialno="4" timestamp="1361960409000">
+<order delivered="false" deliveryWithin="1422433503731" id="44825564" notify="false" orderDiscount="0.0" orderTotal="368.0" orderphone="62576787" payment="cash" preorder="false" serialno="4" timestamp="1422433503731">
 <customer id="11190438">
 <firstname>TORMOD</firstname>
 <lastname>ØVERLIER</lastname>
@@ -153,7 +153,7 @@
 <orderline number="3" price="75.0" qty="1.0">Kjøretillegg</orderline>
 </items>
 </order>
-<order delivered="false" deliveryWithin="1361964024000" id="44825565" notify="false" orderDiscount="17.0" orderTotal="224.0" orderphone="41617757" payment="credit" preorder="false" serialno="5" timestamp="1361960434000">
+<order delivered="false" deliveryWithin="1422433503731" id="44825565" notify="false" orderDiscount="17.0" orderTotal="224.0" orderphone="41617757" payment="credit" preorder="true" serialno="5" timestamp="1422433503731">
 <customer id="10187070">
 <firstname/>
 <lastname>COMPUTANSE AS</lastname>
@@ -184,7 +184,7 @@
 <orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
 </items>
 </order>
-<order delivered="false" deliveryWithin="1361964042000" id="44825566" notify="false" orderDiscount="67.0" orderTotal="230.0" orderphone="41617757" payment="credit" preorder="false" serialno="6" timestamp="1361960453000">
+<order delivered="false" deliveryWithin="1422433503731" id="44825566" notify="false" orderDiscount="67.0" orderTotal="230.0" orderphone="41617757" payment="credit" preorder="false" serialno="6" timestamp="1422433503731">
 <customer id="10187070">
 <firstname/>
 <lastname>COMPUTANSE AS</lastname>
