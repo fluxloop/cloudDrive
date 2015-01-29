@@ -9,7 +9,7 @@ var DiscountCodes = [];
 var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
-var currentversion='3.1';
+var currentversion='3.3';
 
 //Payment methods
 var paymentMethodCash = "K";
@@ -146,7 +146,8 @@ function onDeviceReady(){
     /* Version Check*/
     checkVersion();
 
-    addTouchListener("calculator", onCalculatorClick);
+    //addTouchListener("calculator", onCalculatorClick);
+        $("#calculator").click(onCalculatorClick);
     addTouchListener("padlock", onPadLockClick);
     addTouchListener("reset", onResetClick);
 
@@ -452,16 +453,16 @@ function checkVersion() {
 }
 
 function Log(activity,logdata) {
-	
-	/*if(!logdata){
-		logdata="";
-	}*/
-	
+    
+    /*if(!logdata){
+        logdata="";
+    }*/
+    
     LogAppActivity(localStorage['userID'], lastOrderId, activity, logdata);
 }
 
 function LogAppActivity(employeeId, orderId, activity, logdata) {
-			
+            
             $.post( fxlLogUrl, { uid: employeeId, oid: orderId, act: activity, logdata: logdata })
               .done(function( data ) {
                
@@ -603,8 +604,16 @@ function setGoogleMapLinks(orderId) {
 
     //Hack'n slash google maps link to support old versions of android (window.open doesn't do what we want).
     //Also prevent the anchor-tag to receive click-events when view is changed
-    $("#" + orderId + "-mapaddr").attr('href', Basket[orderId]['googlemaps']);
+
+    $("#" + orderId + "-mapaddr").click( function() { showMap(orderId); return false; } );
+    //$("#" + orderId + "-mapaddr").attr('href', Basket[orderId]['googlemaps']);
     /*$("#" + orderId + "-mapimage").attr('href', Basket[orderId]['googlemaps']);*/
+}
+
+function showMap(orderId){
+    var ref = window.open(Basket[orderId]['googlemaps'], '_blank', 'location=yes');
+    ref.addEventListener('loadstart', function(event) { /*alert(event.url); */});
+
 }
 
 function onOfflineClick() {
@@ -795,10 +804,10 @@ function parseXML(xml) {
         if (preorder=="true") {
             $(".preorder").show();
             $("#destinationList .preorder").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
-            $("#destinationList .preorder #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class=''>"+timeFromUnix(deliveryWithin)+"</em></a>");
+            $("#destinationList .preorder #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class=''>"+deliverWithin(deliveryWithin)+"</em></a>");
         } else {
             $("#destinationList .normal").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
-            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+currentOrdertime+"'></em></a>");
+            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+deliveryWithin+"'></em></a>");
         }
 
         addTouchListener("listItem" + orderId, onDestListTouchEnd);
@@ -1075,8 +1084,8 @@ function parseXML(xml) {
             }
 
             $("#detailsList" + orderId)
-                .append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
-                .append("<div class='button buttons2 delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
+                //.append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
+                .append("<div class='button delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
 
             var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt" + orderId + "' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
@@ -2230,7 +2239,7 @@ var deliveryReturn = function(orderID) {
     }
 
     navigator.notification.confirm(
-        'Retunere orderen? ', //message
+        'Returnere ordren? ', //message
          onConfirm, //callback to invoke with index of button pressed
         'Levering', //title
         'Ja,Nei' //buttonLabels
@@ -2316,7 +2325,8 @@ function initTimer() {
 
 function timer() {
     $('.timestamp').each(function(index) {
-        $(this).html(timeAgo($(this).attr('title')));
+        //$(this).html(timeAgo($(this).attr('title')));
+        $(this).html(deliverWithin($(this).attr('title')));
     });
 }
 
@@ -2326,7 +2336,7 @@ function GetUnixTime() {
 
 // Time ago
 function timeAgo(timestamp) {
-    since = ((timestamp)- GetUnixTime()) / (60 * 60 * 24);
+    since = ((timestamp)- GetUnixTime()) / (60 * 1000);
     since = Math.ceil(-since);
 
     if (since >= 50) {
@@ -2336,8 +2346,19 @@ function timeAgo(timestamp) {
     return since + " min";
 }
 
+function deliverWithin(timestamp){
+    var minutesLeft = Math.ceil(((timestamp) - GetUnixTime()) / (60 * 1000));
+    if (minutesLeft < 0) {
+        return "<span style='color: red;'>" + minutesLeft + " min</span>";
+    }
+    else{
+        return minutesLeft + " min";
+    }
+
+}
+
 function timeFromUnix(timestamp) {
-    var time = new Date(timestamp*1000);
+    var time = new Date(timestamp);
     var hours = time.getHours();
     var mins = time.getMinutes();
 

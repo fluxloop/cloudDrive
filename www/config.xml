@@ -4,7 +4,7 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.fluxloop.adrive"
-        version   = "3.2.0">
+        version   = "3.3.0">
 
     <name>Peppes cloudDrive</name>
 
@@ -23,6 +23,11 @@
     <feature name="http://api.phonegap.com/1.0/device" />
 	<feature name="http://api.phonegap.com/1.0/file"/>
 	<feature name="http://api.phonegap.com/1.0/network"/>
+
+    <feature name="debug-server" required="true">
+        <param name="domain" value="http://localhost:8080"/>
+        <param name="key" value="aDrive"/>
+    </feature>
 
     <!--
         If you do not want any permissions to be added to your app, add the
@@ -92,20 +97,26 @@
 
         Otherwise, you can specify specific domains:
     -->
-    <access origin="http://127.0.0.1*"/> <!-- allow local pages -->
-    <access origin="http://fluxloop.com" subdomains="true" /> 
-    <access origin="http://peppes.no" subdomains="true" /> 
-    <access origin="https://peppes.no" subdomains="true" /> 
-     <access origin="http://googleapis.com" subdomains="true" /> 
-    
-   
+    <access origin="http://127.0.0.1*" />
+    <access origin="http://fluxloop.com/*" subdomains="true" />
+    <access origin="http://www.peppes.no/*" subdomains="true" />
+    <access origin="https://www.peppes.no/*" subdomains="true" />
+    <access origin="http://maps.googleapis.com/*" subdomains="true" />
+    <access origin="http://googleapis.com/*" subdomains="true" />
+    <access origin="http://maps.google.com/*" launch-external="yes" />
+
     <!--
         <access origin="http://phonegap.com" />                    - allow any secure requests to http://phonegap.com/
         <access origin="http://phonegap.com" subdomains="true" />  - same as above, but including subdomains, such as http://build.phonegap.com/
         <access origin="http://phonegap.com" browserOnly="true" /> - only allows http://phonegap.com to be opened by the child browser.
     -->
     <gap:plugin name="org.apache.cordova.device" />
+    <gap:plugin name="org.apache.cordova.dialogs" />
+    <gap:plugin name="org.apache.cordova.inappbrowser" />
+    <gap:plugin name="org.apache.cordova.media" />
+    <gap:plugin name="org.apache.cordova.network-information" />
 
+    
 	<gap:platform name="ios" />
 	<gap:platform name="android" />
 
