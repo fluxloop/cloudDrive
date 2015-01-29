@@ -807,7 +807,7 @@ function parseXML(xml) {
             $("#destinationList .preorder #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class=''>"+deliverWithin(deliveryWithin)+"</em></a>");
         } else {
             $("#destinationList .normal").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
-            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+deliverWithin(deliveryWithin)+"'></em></a>");
+            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+deliveryWithin+"'></em></a>");
         }
 
         addTouchListener("listItem" + orderId, onDestListTouchEnd);
@@ -2325,7 +2325,8 @@ function initTimer() {
 
 function timer() {
     $('.timestamp').each(function(index) {
-        $(this).html(timeAgo($(this).attr('title')));
+        //$(this).html(timeAgo($(this).attr('title')));
+        $(this).html(deliverWithin($(this).attr('title')));
     });
 }
 
