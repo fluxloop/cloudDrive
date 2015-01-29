@@ -9,7 +9,7 @@ var DiscountCodes = [];
 var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
-var currentversion='3.1';
+var currentversion='3.3';
 
 //Payment methods
 var paymentMethodCash = "K";
@@ -1084,8 +1084,8 @@ function parseXML(xml) {
             }
 
             $("#detailsList" + orderId)
-                .append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
-                .append("<div class='button buttons2 delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
+                //.append("<div class='button buttons2 offline' onclick='deliveryReturn(" + orderId + ");'><div>Retur </div></div>")
+                .append("<div class='button delivery offline' id='payButton" + orderId + "' onclick='beginPayment(" + orderId + ");'><div>Betal</div></div>");
 
             var emailText = "<div class='emailReceipt'><div>E-postkvittering:</div>"+emailList+"<input type='email' id='emailReceipt" + orderId + "' value='" + customerEmail + "' onchange='emailChanged(" + orderId + ", this.value)' onkeyup='emailChanged(" + orderId + ", this.value)' /></div>";
 
