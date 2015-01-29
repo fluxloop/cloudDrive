@@ -804,10 +804,10 @@ function parseXML(xml) {
         if (preorder=="true") {
             $(".preorder").show();
             $("#destinationList .preorder").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
-            $("#destinationList .preorder #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class=''>"+timeFromUnix(deliveryWithin)+"</em></a>");
+            $("#destinationList .preorder #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class=''>"+deliverWithin(deliveryWithin)+"</em></a>");
         } else {
             $("#destinationList .normal").append("<div class='destinationListItem listitem' title='" + orderId + "' id='listItem" + orderId + "'></div>");
-            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+currentOrdertime+"'></em></a>");
+            $("#destinationList .normal #listItem"+orderId).append("<a><strong>" + customerAdr + "</strong><em class='timestamp' title='"+deliverWithin(deliveryWithin)+"'></em></a>");
         }
 
         addTouchListener("listItem" + orderId, onDestListTouchEnd);
@@ -2345,8 +2345,19 @@ function timeAgo(timestamp) {
     return since + " min";
 }
 
+function deliverWithin(timestamp){
+    var minutesLeft = Math.ceil(((timestamp) - GetUnixTime()) / (60 * 1000));
+    if (minutesLeft < 0) {
+        return "<span style='color: red;'>" + minutesLeft + " min</span>";
+    }
+    else{
+        return minutesLeft + " min";
+    }
+
+}
+
 function timeFromUnix(timestamp) {
-    var time = new Date(timestamp*1000);
+    var time = new Date(timestamp);
     var hours = time.getHours();
     var mins = time.getMinutes();
 

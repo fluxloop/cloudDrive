@@ -57,7 +57,7 @@
 </group>
 </products>
 <orders>
-<order delivered="false" deliveryWithin="1422433503731" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="true" serialno="2" timestamp="1422433503731">
+<order delivered="false" deliveryWithin="1422532328275" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="true" serialno="2" timestamp="1422433503731">
 <giftcards>
 <giftcard amount="100.0" id="101219178"/>
 </giftcards>
@@ -90,7 +90,7 @@
 <orderline number="2" price="75.0" qty="1.0">Kjøretillegg</orderline>
 </items>
 </order>
-<order delivered="false" deliveryWithin="1422433503731" id="44825559" notify="false" orderDiscount="0.0" orderTotal="301.0" orderphone="62576787" payment="cash" preorder="false" serialno="3" timestamp="1422433503731">
+<order delivered="false" deliveryWithin="1422532367463" id="44825559" notify="false" orderDiscount="0.0" orderTotal="301.0" orderphone="62576787" payment="cash" preorder="false" serialno="3" timestamp="1422433503731">
 <customer id="11190438">
 <firstname>TORMOD</firstname>
 <lastname>ØVERLIER</lastname>
