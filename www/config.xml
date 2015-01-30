@@ -98,7 +98,7 @@
         Otherwise, you can specify specific domains:
     -->
     <access origin="http://127.0.0.1*" />
-    <access origin="http://fluxloop.com/*" subdomains="true" />
+    <access origin="http://fluxloop.com/*" subdomains="true" launch-external="yes" />
     <access origin="http://www.peppes.no/*" subdomains="true" />
     <access origin="https://www.peppes.no/*" subdomains="true" />
     <access origin="http://maps.googleapis.com/*" subdomains="true" />
