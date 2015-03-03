@@ -23,10 +23,8 @@
     <feature name="http://api.phonegap.com/1.0/device" />
 	<feature name="http://api.phonegap.com/1.0/file"/>
 	<feature name="http://api.phonegap.com/1.0/network"/>
-    <feature name="Geolocation">
-        <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
-    </feature>
-
+    <feature name="http://api.phonegap.com/1.0/geolocation"/>
+        
     <feature name="debug-server" required="true">
         <param name="domain" value="http://localhost:8080"/>
         <param name="key" value="aDrive"/>
