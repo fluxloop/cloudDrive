@@ -860,7 +860,7 @@ function parseXML(xml) {
         $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul")
             .append("<li><a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></a></li>")
             .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'>" + customerAdr + "</a></li>")
-            .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + "</a></li>");
+            .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + " - kundetelefon</a></li>");
             
             if(cellPhoneNumber==customerPhone){
             //do nothing
