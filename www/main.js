@@ -611,7 +611,7 @@ function setGoogleMapLinks(orderId) {
 }
 
 function showMap(orderId){
-    var ref = window.open(Basket[orderId]['googlemaps'], '_blank', 'location=yes');
+    var ref = window.open(Basket[orderId]['googlemaps'], '_system', 'location=yes');
     ref.addEventListener('loadstart', function(event) { /*alert(event.url); */});
 
 }
