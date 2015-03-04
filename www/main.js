@@ -9,7 +9,7 @@ var DiscountCodes = [];
 var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
-var currentversion='3.3';
+var currentversion='3.4';
 
 //Payment methods
 var paymentMethodCash = "K";
@@ -611,7 +611,7 @@ function setGoogleMapLinks(orderId) {
 }
 
 function showMap(orderId){
-    var ref = window.open(Basket[orderId]['googlemaps'], '_blank', 'location=yes');
+    var ref = window.open(Basket[orderId]['googlemaps'], '_system', 'location=yes');
     ref.addEventListener('loadstart', function(event) { /*alert(event.url); */});
 
 }
@@ -858,7 +858,7 @@ function parseXML(xml) {
             .append("<ul class='icon'></ul>");
 
         $("#destinationsDetails #destinationInfo #detailsItem" + orderId + " ul")
-            .append("<li><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></li>")
+            .append("<li><a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'><img src='http://maps.googleapis.com/maps/api/staticmap?zoom=15&size="+deviceWidth+"x163&markers=size:large%7Ccolor:red%7C" + encodeURIComponent(customerAdr) + "," + (customerCity) + ",Norway&sensor=false'/></a></li>")
             .append("<li class='home'><a href='#' id='" + orderId + "-mapaddr' href='' class='mapsbutton'>" + customerAdr + "</a></li>")
             .append("<li class='call'><a href='tel:" + customerPhone + "' >" + customerPhone + " - kundetelefon</a></li>");
             
