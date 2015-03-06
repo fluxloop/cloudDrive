@@ -9,7 +9,7 @@ var DiscountCodes = [];
 var ComplaintCodes = [];
 var lastOrderId = 0;
 var lastPaymentCode = "";
-var currentversion='3.4';
+var currentversion='3.5';
 
 //Payment methods
 var paymentMethodCash = "K";
@@ -788,6 +788,9 @@ function parseXML(xml) {
         var deviceWidth = $(window).width();
         var cellPhoneNumber = $(this).attr("orderphone");
         var orderDiscount = $(this).attr("orderDiscount");
+        var deliveryComment = $(this).attr("deliveryComment");
+        if(!deliveryComment)
+            deliveryComment='';
 
         if (!orderDiscount) {
             orderDiscount = 0;
@@ -878,6 +881,7 @@ function parseXML(xml) {
 
         $("#destinationsDetails #destinationInfo #detailsItem"+orderId)
             .append("<div class='info'><p>" + customerInfo + "</p></div>")
+            .append("<div class='info'><p>" + deliveryComment + "</p></div>")
             .append("<div class='button' onclick='arriveAtCustomer();'><div>Fremme hos kunde</div></div>");
 
         /* Build the itemlist pr destination and complaint list */
