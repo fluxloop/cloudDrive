@@ -49,7 +49,7 @@
 <item qty="2.0">Coca-Cola 1,5 liter</item>
 </group>
 <group name="Pizza">
-<item qty="1.0" serialno="2.0">12.Pig's Knuckle</item>
+<item qty="1.0" serialno="2.0">12.Pig's Knucklesssss</item>
 <item qty="1.0" serialno="3.0">1.Peppes Marguerita</item>
 <item qty="1.0" serialno="4.0">30.Heavy Heaven</item>
 <item qty="1.0" serialno="5.0">1.Peppes Marguerita</item>
@@ -57,12 +57,12 @@
 </group>
 </products>
 <orders>
-<order delivered="false" deliveryWithin="1422532328275" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="true" serialno="2" timestamp="1422433503731">
+<order delivered="false" deliveryWithin="1422532328275" id="44825556" notify="false" orderDiscount="0.0" orderTotal="297.0" orderphone="62576787" payment="cash" preorder="true" serialno="2" timestamp="1422433503731" deliveryComment="Bak et hus">
 <giftcards>
 <giftcard amount="100.0" id="101219178"/>
 </giftcards>
 <customer id="11190438">
-<firstname>TORMOD</firstname>
+<firstname>TORMOD22</firstname>
 <lastname>ØVERLIER</lastname>
 <streetname>FAGERLIVEGEN</streetname>
 <streetnumber>29</streetnumber>
