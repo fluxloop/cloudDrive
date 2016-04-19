@@ -1,6 +1,12 @@
 # PhoneGap Build Starter Application
 
-> A Hello World application to get started with PhoneGap Build.
+Peppes cloudDrive - legges i Phonegap build current v3.5
+
+## Version log
+
+### 3.5
+
+- added deliveryComment in XML <order.. >
 
 ## Usage
 
