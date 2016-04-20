@@ -25,8 +25,9 @@ var ignoreClick = false; //Flag for when click-events should be ignored by under
 var screenLocked = false;
 
 //Urls
-var localDriverOrdersUrl = "http://localhost/FetchDriverTotalOrder2.xml";
-var localGiftCardUrl = "http://localhost:8080/giftcard.xml";
+var localDriverOrdersUrl = "http://localhost:5757/FetchDriverTotalOrder2.xml";
+var localDriverOrdersUrl = "http://localhost:5757/svarer_27-02-2013.xml";
+var localGiftCardUrl = "http://localhost:5757/giftcard.xml";
 var phoneLocalDriverOrdersUrl = "svarer_27-02-2013.xml";
 var fxlLogUrl = "http://fluxloop.com/peppes/log.php";
 
@@ -41,7 +42,7 @@ var peppesDeliveryOrderUrl = peppesApiUrl + "/DeliverDriverOrder";
 var desktopModePossible = true;
 var desktopMode = false;
 var offlineMode = false;
-var debugmode = false;
+var debugmode = true;
 
 //Activities
 var activities = [];
@@ -59,7 +60,7 @@ activities['arriveAtCustomer'] = 'arriveAtCustomer';
 activities['error'] = 'error';
 
 function init() {
-    if( navigator.userAgent == "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36" ){
+    if( navigator.userAgent == "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36" ){
         if (desktopModePossible) {
             desktopMode = true;
             $("#desktopBackButton").show();
